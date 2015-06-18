@@ -1,0 +1,6 @@
+bin
+obj
+*.sublime-*
+*.depend
+*.layout
+*.ase
