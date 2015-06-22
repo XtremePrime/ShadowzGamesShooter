@@ -1,6 +1,7 @@
 #include "game.h"
 #include "states/state.h"
 #include "states/gamestate.h"
+#include "states/introstate.h"
 
 void Game::init()
 {
@@ -29,14 +30,14 @@ void Game::handle_events(sf::Event ev)
 		{
 			case sf::Event::Closed:
 			{
-				window.close();
+				// window.close();
 				quit();
 			}break;
 			case sf::Event::KeyPressed:
 			{
 				if(ev.key.code == sf::Keyboard::Escape)
 				{
-					window.close();
+					// window.close();
 					quit();
 				}
 			}break;
@@ -99,7 +100,7 @@ void Game::pop_state()
 void Game::run()
 {
 	init();
-	push_state(GameState::instance());
+	push_state(IntroState::instance());
 	while(is_running)
 	{
 		sf::Event event;
