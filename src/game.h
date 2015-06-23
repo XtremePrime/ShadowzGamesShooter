@@ -12,8 +12,9 @@ class Game
 {
 private:
 	sf::RenderWindow window;
-	const int GAME_WIDTH = 860, GAME_HEIGHT = 640;
+	int game_width = 860, game_height = 640;
 	bool is_running = true;
+	bool is_fullscreen = false;
 	sf::Clock clock;
 	std::vector<State*> state_stack;
 	sf::Image icon;
@@ -34,5 +35,10 @@ public:
 	}
 
 	sf::RenderWindow* get_window() { return &window; }
+	std::vector<State*> get_state_stack() { return state_stack; }
+	int get_width() { return this->game_width; }
+	int get_height() { return this->game_height; }
+	bool get_fullscreen() { return this->is_fullscreen; }
+	void set_fullscreen(bool state) { this->is_fullscreen = state; }	
 };
 #endif // GAME_H

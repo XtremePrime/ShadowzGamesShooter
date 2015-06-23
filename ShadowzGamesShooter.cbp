@@ -55,6 +55,10 @@
 		<Unit filename="src/states/gamestate.h" />
 		<Unit filename="src/states/introstate.cpp" />
 		<Unit filename="src/states/introstate.h" />
+		<Unit filename="src/states/optionsstate.cpp" />
+		<Unit filename="src/states/optionsstate.h" />
+		<Unit filename="src/states/stagestate.cpp" />
+		<Unit filename="src/states/stagestate.h" />
 		<Unit filename="src/states/state.h" />
 		<Extensions>
 			<code_completion />

@@ -6,7 +6,7 @@
 void Game::init()
 {
 	//- Init Win Window
-	this->window.create(sf::VideoMode(GAME_WIDTH, GAME_HEIGHT), "Untitled Game", sf::Style::Titlebar | sf::Style::Close);
+	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game", sf::Style::Titlebar | sf::Style::Close);
 	this->window.setVerticalSyncEnabled(true);
 	this->window.setKeyRepeatEnabled(false);
 
@@ -33,14 +33,14 @@ void Game::handle_events(sf::Event ev)
 				// window.close();
 				quit();
 			}break;
-			case sf::Event::KeyPressed:
-			{
-				if(ev.key.code == sf::Keyboard::Escape)
-				{
-					// window.close();
-					quit();
-				}
-			}break;
+			// case sf::Event::KeyPressed:
+			// {
+			// 	if(ev.key.code == sf::Keyboard::Escape)
+			// 	{
+			// 		// window.close();
+			// 		quit();
+			// 	}
+			// }break;
 		}
 	}
 }
@@ -66,9 +66,9 @@ void Game::change_state(State* state)
 		state_stack.pop_back();
 	}
 
-	//- Store & Init new state
+	//- Store new state
 	state_stack.push_back(state);
-	state_stack.back()->init();
+	// state_stack.back()->init();
 }
 
 void Game::push_state(State* state)
@@ -78,9 +78,9 @@ void Game::push_state(State* state)
 		state_stack.back()->pause();
 	}
 
-	//- Store & Init new state
+	//- Store new state
 	state_stack.push_back(state);
-	state_stack.back()->init();
+	// state_stack.back()->init();
 }
 
 void Game::pop_state()
@@ -101,6 +101,7 @@ void Game::run()
 {
 	init();
 	push_state(IntroState::instance());
+	state_stack.back()->init();
 	while(is_running)
 	{
 		sf::Event event;

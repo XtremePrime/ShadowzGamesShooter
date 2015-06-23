@@ -13,11 +13,15 @@ private:
 	sf::Font font;
 	sf::Text credits;
 	sf::RectangleShape selector;
-	int selected_id;
+	int selected_id = 0;
 	std::vector<sf::Text*> menu_options;
 	const int MAX_OPTIONS = 4;
+	sf::VideoMode desktop;
+
+	int GAME_WIDTH = 860, GAME_HEIGHT = 640, MENU_OFFSET_Y = 90; 
 
 	void move_selected(bool);
+	void win_init();
 protected:
 	static IntroState* _instance;
 	IntroState(){}
