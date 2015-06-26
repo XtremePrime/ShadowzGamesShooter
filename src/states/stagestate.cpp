@@ -27,17 +27,17 @@ void StageState::handle_events(Game* game, sf::Event event)
 	{
 		switch(event.key.code)
 		{
-			case sf::Keyboard::Escape:
-			{
-				game->change_state(IntroState::instance());
-				game->get_state_stack().back()->init();
-			}break;
 			case sf::Keyboard::Return:
 			{
 				game->change_state(GameState::instance());
 				game->get_state_stack().back()->init();
 				std::cout << "GO!\n";
 			}
+			case sf::Keyboard::Escape:
+			{
+				game->change_state(IntroState::instance());
+				game->get_state_stack().back()->init();
+			}break;
 		}
 	}
 }

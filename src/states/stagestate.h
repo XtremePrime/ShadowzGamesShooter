@@ -10,7 +10,7 @@
 class StageState : public State
 {
 private:
-
+	int level_select = 0;
 protected:
 	static StageState* _instance;
 	StageState(){}
