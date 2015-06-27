@@ -19,6 +19,8 @@ void LevelGen::init(std::string path)
 
 void LevelGen::generate_map()
 {
+	typedef std::map<std::string, sf::Color*>::iterator it_type;
+
 	//- map is always named map.png in the level folder
 	sf::Image map;
 	map.loadFromFile(this->path+"map.png");
@@ -37,7 +39,14 @@ void LevelGen::generate_map()
 				tiles.push_back(new Tile(x, y, this->path+"floor.png"));
 			else if(is_color(color, 0, 0, 0))
 				tiles.push_back(new Tile(x, y, this->path+"wall.png"));
-			
+			else{
+				for(it_type iterator = custom_tiles.begin(); iterator != custom_tiles.end(); iterator++)
+				{
+					// std::cout << "Checking for: ("  << (int)iterator->second->r << "," << (int)iterator->second->g << "," << (int)iterator->second->b << "," << (int)iterator->second->a << ")\n";
+					if(is_color(color, (int)iterator->second->r, (int)iterator->second->g, (int)iterator->second->b))
+						tiles.push_back(new Tile(x, y, this->path+iterator->first));
+				}
+			}
 			// std::cout << "Hello @" << x << "," << y << "(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << (int)color.a << ")\n";
 		}
 	}
@@ -98,7 +107,7 @@ void LevelGen::grab_custom_tiles()
 		#undef B
 		#undef A
 
-		std::cout << "(" << (int)custom_tiles["ground.png"]->r << "," << (int)custom_tiles["ground.png"]->g << "," << (int)custom_tiles["ground.png"]->b << "," << (int)custom_tiles["ground.png"]->a << ")\n";
+		// std::cout << "(" << (int)custom_tiles["ground.png"]->r << "," << (int)custom_tiles["ground.png"]->g << "," << (int)custom_tiles["ground.png"]->b << "," << (int)custom_tiles["ground.png"]->a << ")\n";
 	}
 	file.close();
 }

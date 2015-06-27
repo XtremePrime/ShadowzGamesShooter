@@ -1,1 +1,1 @@
-ground.png 255 255 255 255
+lava.png 255 0 0 255
