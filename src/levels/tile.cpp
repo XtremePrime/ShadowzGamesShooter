@@ -10,7 +10,6 @@ void Tile::init(int xx, int yy, std::string filepath)
 {
 	this->x = xx;
 	this->y = yy;
-	std::cout << this->x << "/" << this->y << "\n";
 	this->texture.loadFromFile(filepath);
 	this->sprite.setTexture(texture);
 }

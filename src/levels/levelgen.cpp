@@ -1,8 +1,13 @@
 #include "levelgen.h"
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
 void LevelGen::init(std::string path)
 {
 	this->path = path;
+	grab_custom_tiles();
 }
 
 /*
@@ -36,6 +41,66 @@ void LevelGen::generate_map()
 			// std::cout << "Hello @" << x << "," << y << "(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << (int)color.a << ")\n";
 		}
 	}
+}
+
+void LevelGen::grab_custom_tiles()
+{
+	std::ifstream file;
+	file.open(this->path+"custom_tiles.txt");
+	if(!file.is_open()){std::cout << "File couldn't be open.\n";return;}
+
+	while(!file.eof())
+	{
+		std::string line, name;
+		sf::Color temp_col;
+
+		std::getline(file, line);
+
+		//- Handle actual code by splitting it into tokens
+		std::vector<std::string> tokens;
+		//- We use a lambda expr to split the line
+		auto split = [&tokens](std::string input) -> void
+		{
+			int pos = 0;
+
+			for(int i = 0; i < input.length(); ++i)
+			{	
+				//- If any of these delimiters is found, we split
+				if(input[i] == ' ' || input[i] == '\n' || input[i] == '\0')
+				{
+					std::string x = input.substr(pos, i-pos);
+					//- Only push if the string is not empty!
+					if(!input.substr(pos, i-pos).empty())
+						tokens.push_back(input.substr(pos, i-pos));
+					pos = i+1;
+				}
+
+			}
+
+			//- Considering we don't end with a space, we need to push one last time
+			std::string x = input.substr(pos, input.length()-pos);
+    		if(!x.empty())
+       	 		tokens.push_back(x);
+		};
+		split(line);
+
+		#define NAME tokens[0]
+		#define R tokens[1]
+		#define G tokens[2]
+		#define B tokens[3]
+		#define A tokens[4]
+
+		custom_tiles[NAME] = new sf::Color(atoi(R.c_str()),atoi(G.c_str()),atoi(B.c_str()),atoi(A.c_str()));
+
+		#undef NAME
+		#undef R
+		#undef G
+		#undef B
+		#undef A
+
+		std::cout << "(" << (int)custom_tiles["ground.png"]->r << "," << (int)custom_tiles["ground.png"]->g << "," << (int)custom_tiles["ground.png"]->b << "," << (int)custom_tiles["ground.png"]->a << ")\n";
+	}
+	file.close();
 }
 
 bool LevelGen::is_color(sf::Color color, uint8_t r, uint8_t g, uint8_t b)

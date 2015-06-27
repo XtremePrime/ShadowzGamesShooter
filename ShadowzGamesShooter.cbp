@@ -48,29 +48,6 @@
 		<Linker>
 			<Add directory="lib" />
 		</Linker>
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/AnimatedSprite.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/Direction.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/Main.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/MainGame.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/Map.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/Sound.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/Sprite.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/SpriteContainer.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/SpriteFactory.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/entity/Entity.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/entity/Mob.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/entity/Player.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/rules/KillAllObjective.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/rules/Objective.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/rules/RandomSpawnLocation.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/rules/ReachStarObjective.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/rules/Spawner.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/AirTile.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/DecorationalTile.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/GrassTile.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/ItemTile.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/PlatformTile.java" />
-		<Unit filename="../LudumDare28/src/com/ShadowzGames/LD28/tile/Tile.java" />
 		<Unit filename="src/entities/entity.cpp" />
 		<Unit filename="src/entities/entity.h" />
 		<Unit filename="src/entities/mob.cpp" />
@@ -81,7 +58,6 @@
 		<Unit filename="src/levels/level.h" />
 		<Unit filename="src/levels/levelgen.cpp" />
 		<Unit filename="src/levels/levelgen.h" />
-		<Unit filename="src/levels/levelgen.hpp" />
 		<Unit filename="src/levels/tile.cpp" />
 		<Unit filename="src/levels/tile.h" />
 		<Unit filename="src/main.cpp" />
