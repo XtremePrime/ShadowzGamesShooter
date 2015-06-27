@@ -38,6 +38,8 @@ void StageState::handle_events(Game* game, sf::Event event)
 				game->change_state(IntroState::instance());
 				game->get_state_stack().back()->init();
 			}break;
+			default:
+            break;
 		}
 	}
 }

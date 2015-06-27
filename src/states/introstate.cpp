@@ -6,6 +6,7 @@
 #include <SFML/Window.hpp>
 
 #include "stagestate.h"
+#include "gamestate.h"
 
 IntroState* IntroState::_instance;
 
@@ -102,8 +103,8 @@ void IntroState::handle_events(Game* game, sf::Event event)
 				switch(selected_id)
 				{
 					case 0: //- Singleplayer
-						// game->change_state(StageState::instance());
-						// game->get_state_stack().back()->init();
+						game->change_state(GameState::instance());
+						game->get_state_stack().back()->init();
 					break;
 					case 1: //- Multiplayer
 

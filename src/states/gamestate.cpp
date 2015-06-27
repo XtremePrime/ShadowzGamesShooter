@@ -1,6 +1,7 @@
 #include "gamestate.h"
 #include "introstate.h"
 
+
 #include <sstream>
 
 GameState* GameState::_instance;
@@ -13,7 +14,7 @@ GameState* GameState::instance(){
 
 void GameState::init()
 {
-
+	dev_level.init("res/levels/devtest/");
 }
 
 void GameState::handle_events(Game* game, sf::Event event)
@@ -27,18 +28,20 @@ void GameState::handle_events(Game* game, sf::Event event)
 				game->change_state(IntroState::instance());
 				game->get_state_stack().back()->init();
 			}break;
+			default:
+			break;
 		}
 	}
 }
 
 void GameState::update(Game* game,  sf::Time deltaTime)
 {
-
+	dev_level.update(deltaTime);
 }
 
 void GameState::render(Game* game)
 {
-
+	dev_level.render(game->get_window());
 }
 
 void GameState::cleanup()

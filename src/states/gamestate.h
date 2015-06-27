@@ -6,10 +6,12 @@
 #include <vector>
 #include <cstdlib>
 #include "state.h"
+#include "../levels/level.h"
 
 class GameState : public State
 {
 private:
+	Level dev_level;
 protected:
 	static GameState* _instance;
 	GameState(){}
