@@ -13,7 +13,7 @@ private:
 	bool is_hazard = false;
 	bool is_collidable = false;
 public:
-	const int SIZE = 16;
+	const int SIZE = 32;
 
 	Tile(int, int, std::string);
 	void init(int, int, std::string);

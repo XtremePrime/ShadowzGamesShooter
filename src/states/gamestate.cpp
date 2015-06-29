@@ -14,7 +14,7 @@ GameState* GameState::instance(){
 
 void GameState::init()
 {
-	dev_level.init("res/levels/devtest/");
+	dev_level.init("res/levels/demons/");
 }
 
 void GameState::handle_events(Game* game, sf::Event event)
