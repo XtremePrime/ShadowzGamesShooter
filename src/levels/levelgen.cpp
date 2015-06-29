@@ -57,6 +57,7 @@ void LevelGen::grab_custom_tiles()
 	std::ifstream file;
 	file.open(this->path+"custom_tiles.txt");
 	if(!file.is_open()){std::cout << "File couldn't be open.\n";return;}
+	if(file.peek() == std::ifstream::traits_type::eof()){std::cout<<"Custom tiles file is empty!\n";return;}
 
 	while(!file.eof())
 	{
