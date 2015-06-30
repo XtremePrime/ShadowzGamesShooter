@@ -48,10 +48,11 @@
 		<Linker>
 			<Add directory="lib" />
 		</Linker>
-		<Unit filename="src/entities/entity.cpp" />
 		<Unit filename="src/entities/entity.h" />
 		<Unit filename="src/entities/mob.cpp" />
 		<Unit filename="src/entities/mob.h" />
+		<Unit filename="src/entities/player.cpp" />
+		<Unit filename="src/entities/player.h" />
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/game.h" />
 		<Unit filename="src/levels/level.cpp" />
@@ -70,6 +71,8 @@
 		<Unit filename="src/states/stagestate.cpp" />
 		<Unit filename="src/states/stagestate.h" />
 		<Unit filename="src/states/state.h" />
+		<Unit filename="src/texturemanager.cpp" />
+		<Unit filename="src/texturemanager.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

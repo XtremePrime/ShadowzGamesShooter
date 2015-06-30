@@ -7,11 +7,13 @@
 #include <cstdlib>
 #include "state.h"
 #include "../levels/level.h"
+#include "../entities/player.h"
 
 class GameState : public State
 {
 private:
 	Level dev_level;
+	Player player;
 protected:
 	static GameState* _instance;
 	GameState(){}
