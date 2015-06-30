@@ -33,14 +33,8 @@ void Game::handle_events(sf::Event ev)
 				// window.close();
 				quit();
 			}break;
-			// case sf::Event::KeyPressed:
-			// {
-			// 	if(ev.key.code == sf::Keyboard::Escape)
-			// 	{
-			// 		// window.close();
-			// 		quit();
-			// 	}
-			// }break;
+			default:
+			break;
 		}
 	}
 }
@@ -100,7 +94,7 @@ void Game::pop_state()
 void Game::run()
 {
 	init();
-	push_state(IntroState::instance());
+	change_state(IntroState::instance());
 	state_stack.back()->init();
 	while(is_running)
 	{

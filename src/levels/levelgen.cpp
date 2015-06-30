@@ -3,18 +3,29 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 void LevelGen::init(std::string path)
 {
 	this->path = path;
+
+	txmgr.load_texture("floor.png", this->path+"floor.png");
+	txmgr.load_texture("wall.png", this->path+"wall.png");
+
 	grab_custom_tiles();
 }
 
 /*
-* COLOR SCHEME:
+* SCHEME:
+* White and Black are both const colors allocated their certain filenames:
 * White: Floor tiles (walkable) [floor.png]
 * Black: Walls/Barrier (non-walkable) [wall.png]
-* Red, Blue, Green, Purple: (???) [tile1.png, tile2.png...]
+* 
+* To declare customs, create a "custom_tiles.txt" file in the level folder
+* and fill it after the following schema:
+* <filename> <Red> <Green> <Blue> <Alpha>
+* lava.png 255 0 0 255
+* TIP: Keep alpha at 255, to avoid problems in the future
 */
 
 void LevelGen::generate_map()
@@ -25,31 +36,28 @@ void LevelGen::generate_map()
 	sf::Image map;
 	map.loadFromFile(this->path+"map.png");
 
-	sf::Vector2u size = map.getSize();
-
-	for(int y = 0; y < size.y; ++y)
+	size = map.getSize();
+	sf::Clock timer;
+	for(int i = 0; i < size.x*size.y; ++i)
 	{
-		for(int x = 0; x < size.x; ++x)
-		{
-			//- Grab 1 pixel at a time
-			sf::Color color = map.getPixel(x, y);
+		int x = (int)i%size.x, y = (int)floor(i/size.x);
+		sf::Color color = map.getPixel(x, y);
 
-			//- Set tiles based on colors in the map
-			if(is_color(color, 255, 255, 255))
-				tiles.push_back(new Tile(x, y, this->path+"floor.png"));
-			else if(is_color(color, 0, 0, 0))
-				tiles.push_back(new Tile(x, y, this->path+"wall.png"));
-			else{
-				for(it_type iterator = custom_tiles.begin(); iterator != custom_tiles.end(); iterator++)
-				{
-					// std::cout << "Checking for: ("  << (int)iterator->second->r << "," << (int)iterator->second->g << "," << (int)iterator->second->b << "," << (int)iterator->second->a << ")\n";
-					if(is_color(color, (int)iterator->second->r, (int)iterator->second->g, (int)iterator->second->b))
-						tiles.push_back(new Tile(x, y, this->path+iterator->first));
-				}
+		//- Set tiles based on colors in the map
+		if(is_color(color, 255, 255, 255))
+			tiles.push_back(new Tile(x, y, txmgr.get_ref("floor.png")));
+		else if(is_color(color, 0, 0, 0))
+			tiles.push_back(new Tile(x, y, txmgr.get_ref("wall.png")));
+		else{
+			if(custom_tiles.size() < 1){continue;}
+			for(it_type iterator = custom_tiles.begin(); iterator != custom_tiles.end(); iterator++)
+			{
+				if(is_color(color, (int)iterator->second->r, (int)iterator->second->g, (int)iterator->second->b))
+					tiles.push_back(new Tile(x, y, txmgr.get_ref(iterator->first)));
 			}
-			// std::cout << "Hello @" << x << "," << y << "(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << (int)color.a << ")\n";
 		}
 	}
+	std::cout << "Level constructed in [" << timer.restart().asMilliseconds() << "] with a total of [" << tiles.size() << "] tiles\n";
 }
 
 void LevelGen::grab_custom_tiles()
@@ -108,11 +116,15 @@ void LevelGen::grab_custom_tiles()
 		#undef B
 		#undef A
 
+		//- Load the new custom tile name into the texture as a full string ("lava.png")
+		txmgr.load_texture(tokens[0], this->path+tokens[0]);
+
 		// std::cout << "(" << (int)custom_tiles["ground.png"]->r << "," << (int)custom_tiles["ground.png"]->g << "," << (int)custom_tiles["ground.png"]->b << "," << (int)custom_tiles["ground.png"]->a << ")\n";
 	}
 	file.close();
 }
 
+//- Check if a color follows an RGB
 bool LevelGen::is_color(sf::Color color, uint8_t r, uint8_t g, uint8_t b)
 {
 	if(color.r == r && color.g == g && color.b == b)
