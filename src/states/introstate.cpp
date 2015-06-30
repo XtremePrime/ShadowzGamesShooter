@@ -7,6 +7,7 @@
 
 #include "stagestate.h"
 #include "gamestate.h"
+#include "optionsstate.h"
 
 IntroState* IntroState::_instance;
 
@@ -110,18 +111,21 @@ void IntroState::handle_events(Game* game, sf::Event event)
 
 					break;
 					case 2: //- Options
-						if(!game->get_fullscreen())
-						{
-							GAME_WIDTH = desktop.width; GAME_HEIGHT = desktop.height;
-							game->get_window()->create(desktop, "Untitled Game", sf::Style::Fullscreen);
-							game->set_fullscreen(true);
-						}else
-						{
-							GAME_WIDTH = 860; GAME_HEIGHT = 640;
-							game->get_window()->create(sf::VideoMode(860,640), "Untitled Game", sf::Style::Titlebar | sf::Style::Close);
-							game->set_fullscreen(false);
-						}
-						win_init();
+						game->push_state(OptionsState::instance());
+						game->get_state_stack().back()->init();
+
+						// if(!game->get_fullscreen())
+						// {
+						// 	GAME_WIDTH = desktop.width; GAME_HEIGHT = desktop.height;
+						// 	game->get_window()->create(desktop, "Untitled Game", sf::Style::Fullscreen);
+						// 	game->set_fullscreen(true);
+						// }else
+						// {
+						// 	GAME_WIDTH = 860; GAME_HEIGHT = 640;
+						// 	game->get_window()->create(sf::VideoMode(860,640), "Untitled Game", sf::Style::Titlebar | sf::Style::Close);
+						// 	game->set_fullscreen(false);
+						// }
+						// win_init();
 					break;
 					case 3: //- Exit
 						game->quit();
