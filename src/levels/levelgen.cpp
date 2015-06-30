@@ -27,6 +27,7 @@ void LevelGen::generate_map()
 
 	sf::Vector2u size = map.getSize();
 
+    sf::Clock timer;
 	for(int y = 0; y < size.y; ++y)
 	{
 		for(int x = 0; x < size.x; ++x)
@@ -50,6 +51,7 @@ void LevelGen::generate_map()
 			// std::cout << "Hello @" << x << "," << y << "(" << (int)color.r << "," << (int)color.g << "," << (int)color.b << "," << (int)color.a << ")\n";
 		}
 	}
+	std::cout << "Time: " << timer.restart().asMilliseconds() << "\n";
 }
 
 void LevelGen::grab_custom_tiles()
@@ -74,7 +76,7 @@ void LevelGen::grab_custom_tiles()
 			int pos = 0;
 
 			for(int i = 0; i < input.length(); ++i)
-			{	
+			{
 				//- If any of these delimiters is found, we split
 				if(input[i] == ' ' || input[i] == '\n' || input[i] == '\0')
 				{

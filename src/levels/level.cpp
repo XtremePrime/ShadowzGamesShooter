@@ -17,8 +17,8 @@ void Level::render(sf::RenderWindow *window)
 
 void Level::update(sf::Time deltaTime)
 {
-	for(int i = 0; i < gen.get_tiles().size(); ++i){
+	/*for(int i = 0; i < gen.get_tiles().size(); ++i){
 		// std::cout << gen.get_tiles()[i]->get_x() << "/" << gen.get_tiles()[i]->get_y() << "\n";
 		gen.get_tiles()[i]->update(deltaTime);
-	}
+	}*/
 }

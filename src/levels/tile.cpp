@@ -12,11 +12,12 @@ void Tile::init(int xx, int yy, std::string filepath)
 	this->y = yy;
 	this->texture.loadFromFile(filepath);
 	this->sprite.setTexture(texture);
+	this->sprite.setPosition(x*SIZE, y*SIZE);
 }
 
 void Tile::update(sf::Time deltaTime)
 {
-	this->sprite.setPosition(x*SIZE, y*SIZE);
+
 }
 
 void Tile::render(sf::RenderWindow *win)
