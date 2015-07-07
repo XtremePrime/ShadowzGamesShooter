@@ -16,7 +16,7 @@ protected:
 public:
 	static OptionsState* instance();
     ~OptionsState(){}
-	void init();
+	void init(Game* game);
 	void cleanup();
 
 	void handle_events(Game* game, sf::Event event);

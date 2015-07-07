@@ -13,7 +13,7 @@ OptionsState* OptionsState::instance(){
 	return _instance;
 }
 
-void OptionsState::init()
+void OptionsState::init(Game* game)
 {
 
 }
@@ -27,7 +27,6 @@ void OptionsState::handle_events(Game* game, sf::Event event)
 			case sf::Keyboard::Escape:
 			{
 				game->change_state(IntroState::instance());
-				game->get_state_stack().back()->init();
 			}break;
 			default:
 			break;

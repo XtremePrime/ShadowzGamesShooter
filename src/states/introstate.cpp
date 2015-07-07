@@ -17,7 +17,7 @@ IntroState* IntroState::instance(){
 	return _instance;
 }
 
-void IntroState::init()
+void IntroState::init(Game* game)
 {
 	desktop = sf::VideoMode::getDesktopMode();
 
@@ -26,19 +26,19 @@ void IntroState::init()
 
 	//- Push menu options
 	for(int i = 0; i < MAX_OPTIONS; ++i)
-		menu_options.push_back(new sf::Text());
+		menu_options.push_back(new sf::Text("", font, 15));
 
 	//- Init menu options
 	for(int i = 0; i < menu_options.size(); ++i)
-	{
-		menu_options[i]->setCharacterSize(15);
-		menu_options[i]->setFont(font);
 		menu_options[i]->setColor(sf::Color::White);
-	}
+		// menu_options[i]->setCharacterSize(15);
+		// menu_options[i]->setFont(font);
+		
 	menu_options[0]->setString("START GAME (SINGLEPLAYER)");
-	menu_options[1]->setString("START GAME (MULTIPLAYER)");
-	menu_options[2]->setString("OPTIONS (FULLSCREEN/WINDOWED)");
-	menu_options[3]->setString("EXIT");
+	menu_options[1]->setString("HOST");
+	menu_options[2]->setString("JOIN");
+	menu_options[3]->setString("OPTIONS (FULLSCREEN/WINDOWED)");
+	menu_options[4]->setString("EXIT");
 
 	//- Init selector
 	selector.setSize(sf::Vector2f(14, 14));
@@ -51,6 +51,11 @@ void IntroState::init()
 	credits.setColor(sf::Color::White);
 	credits.setString("© 2015 ShadowzGames");
 
+	version.setCharacterSize(15);
+	version.setFont(font);
+	version.setColor(sf::Color::White);
+	version.setString(game->get_gameobject()->version);
+
 	win_init();
 
 	std::cout << desktop.width << "/" << desktop.height << "\n";
@@ -62,6 +67,7 @@ void IntroState::win_init()
 		menu_options[i]->setPosition(GAME_WIDTH/2-90, (i*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 	selector.setPosition(GAME_WIDTH/2-114, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 	credits.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
+	version.setPosition(10, GAME_HEIGHT-30);
 }
 
 void IntroState::move_selected(bool up)
@@ -104,15 +110,19 @@ void IntroState::handle_events(Game* game, sf::Event event)
 				switch(selected_id)
 				{
 					case 0: //- Singleplayer
+						game->get_gameobject()->is_multiplayer = false;
+						game->get_gameobject()->port = 7777;
+						game->get_gameobject()->ip_address = "127.0.0.1";
 						game->change_state(GameState::instance());
-						game->get_state_stack().back()->init();
 					break;
-					case 1: //- Multiplayer
-
+					case 1: //- Host
+						game->get_gameobject()->is_multiplayer = true;
+						game->change_state(GameState::instance());
 					break;
-					case 2: //- Options
+					case 2: //- Join
+					break;
+					case 3: //- Options
 						game->push_state(OptionsState::instance());
-						game->get_state_stack().back()->init();
 
 						// if(!game->get_fullscreen())
 						// {
@@ -127,8 +137,10 @@ void IntroState::handle_events(Game* game, sf::Event event)
 						// }
 						// win_init();
 					break;
-					case 3: //- Exit
+					case 4: //- Exit
 						game->quit();
+					break;
+					default:
 					break;
 				}
 			}break;
@@ -149,10 +161,14 @@ void IntroState::render(Game* game)
 		game->get_window()->draw(*menu_options[i]);
 	game->get_window()->draw(selector);
 	game->get_window()->draw(credits);
+	game->get_window()->draw(version);
 }
 
 void IntroState::cleanup()
 {
+	for(int i = 0; i < menu_options.size(); ++i)
+		delete (menu_options[i]);
+	menu_options.clear();
 	_instance = NULL;
 }
 

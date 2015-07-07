@@ -55,6 +55,7 @@
 		<Unit filename="src/entities/player.h" />
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/game.h" />
+		<Unit filename="src/gameobject.hpp" />
 		<Unit filename="src/levels/level.cpp" />
 		<Unit filename="src/levels/level.h" />
 		<Unit filename="src/levels/levelgen.cpp" />
@@ -62,6 +63,7 @@
 		<Unit filename="src/levels/tile.cpp" />
 		<Unit filename="src/levels/tile.h" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/network/server.h" />
 		<Unit filename="src/states/gamestate.cpp" />
 		<Unit filename="src/states/gamestate.h" />
 		<Unit filename="src/states/introstate.cpp" />

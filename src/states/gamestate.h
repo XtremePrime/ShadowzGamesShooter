@@ -3,24 +3,35 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Network.hpp>
 #include <vector>
 #include <cstdlib>
 #include "state.h"
 #include "../levels/level.h"
 #include "../entities/player.h"
+#include "../entities/entity.h"
+#include "../entities/mob.h"
+
 
 class GameState : public State
 {
 private:
-	Level dev_level;
+	Level level;
 	Player player;
+	Mob mob;
+
+	sf::IpAddress ip_address;
+	unsigned short port;
+
+	//- Networking stuff (experimental)
+	sf::UdpSocket socket;
 protected:
 	static GameState* _instance;
 	GameState(){}
 public:
 	static GameState* instance();
     ~GameState(){}
-	void init();
+	void init(Game* game);
 	void cleanup();
 
 	void handle_events(Game* game, sf::Event event);

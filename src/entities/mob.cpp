@@ -1,26 +1,42 @@
 #include "mob.h"
 
-Mob::Mob(sf::Vector2f c, int type)
+#include <iostream>
+#include <cmath>
+
+Mob::Mob()
 {
-    init(c, type);
+    //TODO
 }
 
-void Mob::init(sf::Vector2f c, int type)
+Mob::~Mob()
 {
-    switch(type){
-    //to do
+    //TODO
+}
 
-    }
+void Mob::init(int x, int y, int w, int h)
+{
+	this->x = x;
+	this->y = y;
+	this->w = w;
+	this->h = h;
+	rect.setSize(sf::Vector2f(w, h));
+	rect.setFillColor(sf::Color::Red);
+	rect.setPosition(sf::Vector2f(x, y));
 
-    this->hp =  ;//?
-    this->max_hp = ; //?
-    this->dmg =  ;//?
+	this->bbox = sprite.getGlobalBounds();
+}
+
+void Mob::handle_events(sf::Event *event)
+{
 
 }
 
-bool Mob::hasCollision(Tile* tile)
+void Mob::update(sf::Time deltaTime)
 {
-	if(tile->may_pass() == true)
-		return false;
-	return true;
+	this->bbox = sprite.getGlobalBounds();
+}
+
+void Mob::render(sf::RenderWindow *win)
+{
+	win->draw(rect);
 }

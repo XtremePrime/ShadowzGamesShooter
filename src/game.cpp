@@ -6,7 +6,7 @@
 void Game::init()
 {
 	//- Init Win Window
-	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game", sf::Style::Titlebar | sf::Style::Close);
+	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game "+gameobject.version, sf::Style::Titlebar | sf::Style::Close);
 	this->window.setVerticalSyncEnabled(true);
 	this->window.setKeyRepeatEnabled(false);
 
@@ -62,7 +62,7 @@ void Game::change_state(State* state)
 
 	//- Store new state
 	state_stack.push_back(state);
-	// state_stack.back()->init();
+	state_stack.back()->init(this);
 }
 
 void Game::push_state(State* state)
@@ -74,7 +74,7 @@ void Game::push_state(State* state)
 
 	//- Store new state
 	state_stack.push_back(state);
-	// state_stack.back()->init();
+	state_stack.back()->init(this);
 }
 
 void Game::pop_state()
@@ -94,8 +94,7 @@ void Game::pop_state()
 void Game::run()
 {
 	init();
-	change_state(IntroState::instance());
-	state_stack.back()->init();
+	push_state(IntroState::instance());
 	while(is_running)
 	{
 		sf::Event event;

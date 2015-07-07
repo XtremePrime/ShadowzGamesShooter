@@ -11,17 +11,27 @@ void Level::init(std::string filepath)
 	TOTAL_TILES = gen.get_tiles().size();
 }
 
+void Level::handle_events(sf::Event *event)
+{
+
+}
+
 void Level::render(sf::RenderWindow *window, int xp, int yp)
 {
 	window->setView(view);
 
 	sf::Clock timer;
 	
+	//- XP and YP is the position of the player
+	//- PosX and PosY is the position of the screen
 	int posx = xp + 10 - (view.getSize().x/2);
 	int posy = yp + 10 - (view.getSize().y/2);
 
 	int count = 0;
 
+	//- Rendering every tile that is visible to the current player.
+	//- Also a few tiles that are not visible so that the game
+	//- doesn't show black screens when removing tiles out of view.
 	for(int i = 0; i < TOTAL_TILES; ++i)
 	{
 		// std::cout << "gen.get_tiles()[i]->get_x(): " << gen.get_tiles()[i]->get_x() << " / posx-32: " << posx-32 << " / view.getSize().x+32: " << view.getSize().x+32 << "\n"; 
@@ -34,7 +44,7 @@ void Level::render(sf::RenderWindow *window, int xp, int yp)
 		}
 	}
 	
-	std::cout << "It took [" << timer.restart().asMilliseconds() << "] ms to render  [" << count << "] from [" << TOTAL_TILES << "] total tiles\n";
+	// std::cout << "It took [" << timer.restart().asMilliseconds() << "] ms to render  [" << count << "] from [" << TOTAL_TILES << "] total tiles\n";
 
 	view.reset(sf::FloatRect(posx, posy, 860, 640));
 }

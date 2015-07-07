@@ -4,29 +4,23 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "entity.h"
-#include "player.h"
 
 class Mob : public Entity
 {
-private:
-
+protected:
+	int speed = 200, hp;
+	sf::RectangleShape rect;
 public:
-    Mob(sf::Vector2f, Level, int);
-
-    void init(sf::Vector2f, Level, int);
-
-    Void move(sf::Vectorsf);
-    bool hasCollision(Tile*);
-    bool hitsPlayer(Tile*, Player);
-    sf::Vector2f generate_Move(Level);
-
-    void handle_events(sf::Event event);
+	Mob();
+	~Mob();
+	void init(int x, int y, int w, int h);
+    void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
-    void render(sf::RenderWindow *win)
+    void render(sf::RenderWindow *win);
 
-    int get_hp() { return this->hp; }
-    int get_dmg() { return this->dmg; }
-    bool get_death() { return this->is_dead; }
+    // int get_hp() { return this->hp; }
+    // int get_dmg() { return this->dmg; }
+    // bool get_death() { return this->is_dead; }
 };
 #endif
 

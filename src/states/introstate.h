@@ -12,10 +12,11 @@ class IntroState : public State
 private:
 	sf::Font font;
 	sf::Text credits;
+	sf::Text version;
 	sf::RectangleShape selector;
 	int selected_id = 0;
 	std::vector<sf::Text*> menu_options;
-	const int MAX_OPTIONS = 4;
+	const int MAX_OPTIONS = 5;
 	sf::VideoMode desktop;
 
 	int GAME_WIDTH = 860, GAME_HEIGHT = 640, MENU_OFFSET_Y = 90; 
@@ -28,7 +29,7 @@ protected:
 public:
 	static IntroState* instance();
     ~IntroState(){}
-	void init();
+	void init(Game* game);
 	void cleanup();
 
 	void handle_events(Game* game, sf::Event event);

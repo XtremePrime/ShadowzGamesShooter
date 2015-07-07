@@ -7,7 +7,7 @@ class State
 {
 private:
 public:
-	virtual void init() = 0;
+	virtual void init(Game* game) = 0;
 	virtual void cleanup() = 0;
 
 	virtual void handle_events(Game* game, sf::Event event) = 0;

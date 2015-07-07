@@ -9,7 +9,6 @@ class Level
 private:
 	LevelGen gen;
 	sf::View view;
-	int xscroll=32;
 	sf::Vector2u map_size;
 	int TOTAL_TILES;
 public:
@@ -19,6 +18,7 @@ public:
 	void update(sf::Time);
 
 	Tile* get_tile(int, int);
+	sf::View& get_view() { return this->view; }
 };
 
 #endif // LEVEL_H

@@ -17,7 +17,7 @@ protected:
 public:
 	static StageState* instance();
     ~StageState(){}
-	void init();
+	void init(Game* game);
 	void cleanup();
 
 	void handle_events(Game* game, sf::Event event);
