@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #ifndef ENTITY_H
 #define ENTITY_H
@@ -21,7 +22,8 @@ public:
 
     bool intersects(Entity& e)
     {
-        //- TODO collision with entity e
+        return this->bbox.intersects(e.get_bbox());
+        // return !(this->x + this->w < e.get_x() || y + h < e.get_y() || x - w > e.get_w() || y - h > e.get_h());
     }
 
     std::string get_name() { return this->name; }
@@ -32,6 +34,10 @@ public:
     void set_x(int xx){ this->x = xx; }
     void set_y(int yy){ this->y = yy; }
     void remove(){ this->removed = true; }
+    float get_rotation(){ return this->sprite.getRotation(); }
+    sf::Sprite& get_model() { return this->sprite; }
+    sf::FloatRect& get_bbox() { return this->bbox; }
+
 };
 
 #endif // ENTITY_H

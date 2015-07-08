@@ -11,7 +11,7 @@
 #include "../entities/player.h"
 #include "../entities/entity.h"
 #include "../entities/mob.h"
-
+#include "../entities/bullet.h"
 
 class GameState : public State
 {
@@ -19,12 +19,18 @@ private:
 	Level level;
 	Player player;
 	Mob mob;
+	std::vector<Mob*> mobs;
+	std::vector<Bullet*> bullets;
 
-	sf::IpAddress ip_address;
-	unsigned short port;
+	bool is_paused = false;
 
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
+	sf::IpAddress ip_address;
+	unsigned short port;
+
+	void rotate(Player*, Game*, sf::Time);
+	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);
 protected:
 	static GameState* _instance;
 	GameState(){}

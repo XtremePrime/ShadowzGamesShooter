@@ -48,6 +48,8 @@
 		<Linker>
 			<Add directory="lib" />
 		</Linker>
+		<Unit filename="src/entities/bullet.cpp" />
+		<Unit filename="src/entities/bullet.h" />
 		<Unit filename="src/entities/entity.h" />
 		<Unit filename="src/entities/mob.cpp" />
 		<Unit filename="src/entities/mob.h" />

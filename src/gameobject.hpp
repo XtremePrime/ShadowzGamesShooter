@@ -15,13 +15,14 @@ public:
 	unsigned short port = 7777;
 	bool is_multiplayer = false;
 	bool is_fullscreen = false;
+	bool is_standard_movement = true;
 
 	//- Level objects
 	std::string level_name = "devtest";
 
 	//- Options objects
 	int width = 860, height = 640;
-	std::string version = "v0.2_2";
+	std::string version = "v0.2_3";
 };
 
 #endif // GAMEOBJECT_H
