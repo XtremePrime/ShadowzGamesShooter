@@ -5,7 +5,12 @@
 
 Mob::Mob()
 {
-    //TODO
+	
+}
+
+Mob::Mob(int x, int y, int w, int h)
+{
+    init(x,y,w,h);
 }
 
 Mob::~Mob()
@@ -33,15 +38,22 @@ void Mob::init(int x, int y, int w, int h)
 
 void Mob::handle_events(sf::Event *event)
 {
-
+	if(!removed)
+	{}
 }
 
 void Mob::update(sf::Time deltaTime)
 {
+	if(hp <= 0){
+		remove();
+	}
 	this->bbox = sprite.getGlobalBounds();
 }
 
 void Mob::render(sf::RenderWindow *win)
 {
-	win->draw(sprite);
+	if(!removed)
+	{
+		win->draw(sprite);
+	}
 }

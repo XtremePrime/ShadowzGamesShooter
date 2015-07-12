@@ -66,6 +66,10 @@
 		<Unit filename="src/levels/tile.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/network/server.h" />
+		<Unit filename="src/pugiconfig.hpp" />
+		<Unit filename="src/pugixml.cpp" />
+		<Unit filename="src/pugixml.hpp" />
+		<Unit filename="src/soundmanager.h" />
 		<Unit filename="src/states/gamestate.cpp" />
 		<Unit filename="src/states/gamestate.h" />
 		<Unit filename="src/states/introstate.cpp" />

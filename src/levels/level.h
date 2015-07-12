@@ -14,7 +14,7 @@ private:
 public:
 	void init(std::string);
 	void handle_events(sf::Event*);
-	void render(sf::RenderWindow*, int, int);
+	void render(sf::RenderWindow*, int, int, int, int);
 	void update(sf::Time);
 
 	Tile* get_tile(int, int);

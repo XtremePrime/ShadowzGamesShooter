@@ -18,16 +18,24 @@ class GameState : public State
 private:
 	Level level;
 	Player player;
-	Mob mob;
 	std::vector<Mob*> mobs;
 	std::vector<Bullet*> bullets;
 
 	bool is_paused = false;
+	bool has_sfx;
 
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
 	sf::IpAddress ip_address;
 	unsigned short port;
+
+	//- Audio stuff
+	sf::Music music;
+	sf::SoundBuffer shoot_buf; sf::Sound shoot_snd;
+
+	//- UI stuff
+	sf::Font font;
+	sf::Text score_txt;
 
 	void rotate(Player*, Game*, sf::Time);
 	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);

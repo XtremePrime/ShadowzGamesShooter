@@ -9,21 +9,20 @@ class Entity
 protected:
     std::string name;
     int x, y, w, h;
-    bool removed;
 
     sf::Texture texture;
     sf::Sprite sprite;
     sf::FloatRect bbox;
 public:
+    bool removed = false;
+
     virtual void init(int x, int y, int w, int h) = 0;
 	virtual void render(sf::RenderWindow *win) = 0;
 	virtual void update(sf::Time deltaTime) = 0;
 	virtual void handle_events(sf::Event *event) = 0;
 
-    bool intersects(Entity& e)
-    {
+    bool intersects(Entity& e){
         return this->bbox.intersects(e.get_bbox());
-        // return !(this->x + this->w < e.get_x() || y + h < e.get_y() || x - w > e.get_w() || y - h > e.get_h());
     }
 
     std::string get_name() { return this->name; }

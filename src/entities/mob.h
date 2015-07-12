@@ -9,14 +9,18 @@ class Mob : public Entity
 {
 protected:
 	int speed = 200, hp;
+    int points = 100;
 	sf::RectangleShape rect;
 public:
-	Mob();
+    Mob();
+	Mob(int, int, int, int);
 	~Mob();
 	void init(int x, int y, int w, int h);
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
     void render(sf::RenderWindow *win);
+
+    int get_points(){return this->points;}
 
     // int get_hp() { return this->hp; }
     // int get_dmg() { return this->dmg; }

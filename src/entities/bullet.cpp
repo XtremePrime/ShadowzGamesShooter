@@ -22,12 +22,21 @@ void Bullet::init(int x, int y, int w, int h)
 
 void Bullet::handle_events(sf::Event *event)
 {
+	if(!removed)
+	{
 
+	}
 }
 
 void Bullet::update(sf::Time deltaTime)
 {
-	move(deltaTime);
+	if(!removed)
+	{
+		move(deltaTime);
+		if(traveldist >= 100)
+			remove();
+		this->bbox = rect.getGlobalBounds();	
+	}
 }
 
 void Bullet::move(sf::Time dt)
@@ -45,9 +54,14 @@ void Bullet::move(sf::Time dt)
 	y += vy * dt.asSeconds();
 
 	rect.setPosition(sf::Vector2f(x, y));
+
+	traveldist++;
 }
 
 void Bullet::render(sf::RenderWindow *win)
 {
-	win->draw(rect);
+	if(!removed)
+	{
+		win->draw(rect);
+	}	
 }

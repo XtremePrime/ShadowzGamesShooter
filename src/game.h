@@ -21,6 +21,10 @@ private:
 	sf::Image icon;
 
 	void init();
+	void create_files(int);
+	int has_files();
+	void setup_gameobject();
+
 	void update(sf::Time);
 	void handle_events(sf::Event);
 	void render(sf::RenderWindow&);
@@ -41,6 +45,6 @@ public:
 	int get_width() { return this->game_width; }
 	int get_height() { return this->game_height; }
 	// bool get_fullscreen() { return this->is_fullscreen; }
-	// void set_fullscreen(bool state) { this->is_fullscreen = state; }	
+	// void set_fullscreen(bool state) { this->is_fullscreen = state; }
 };
 #endif // GAME_H

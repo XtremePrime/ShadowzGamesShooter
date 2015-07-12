@@ -1,6 +1,8 @@
 #include "level.h"
 #include "levelgen.h"
 
+#include <cmath>
+
 void Level::init(std::string filepath)
 {
 	gen.init(filepath);
@@ -16,16 +18,14 @@ void Level::handle_events(sf::Event *event)
 
 }
 
-void Level::render(sf::RenderWindow *window, int xp, int yp)
+void Level::render(sf::RenderWindow *window, int xp, int yp, int w, int h)
 {
-	window->setView(view);
-
 	sf::Clock timer;
 	
 	//- XP and YP is the position of the player
 	//- PosX and PosY is the position of the screen
-	int posx = xp + 10 - (view.getSize().x/2);
-	int posy = yp + 10 - (view.getSize().y/2);
+	int posx = xp + 5 - (view.getSize().x/2);
+	int posy = yp + 5 - (view.getSize().y/2);
 
 	int count = 0;
 
@@ -46,7 +46,7 @@ void Level::render(sf::RenderWindow *window, int xp, int yp)
 	
 	// std::cout << "It took [" << timer.restart().asMilliseconds() << "] ms to render  [" << count << "] from [" << TOTAL_TILES << "] total tiles\n";
 
-	view.reset(sf::FloatRect(posx, posy, 860, 640));
+	view.reset(sf::FloatRect(posx, posy, w, h));
 }
 
 void Level::update(sf::Time deltaTime)
@@ -61,7 +61,7 @@ void Level::update(sf::Time deltaTime)
 Tile* Level::get_tile(int x, int y)
 {
 	sf::Vector2u size = gen.get_map_size();
-	int xa = (x/32)-1;
-	int ya = (y/32)-1;
+	int xa = floor(x/32);
+	int ya = floor(y/32);
 	return gen.get_tiles()[xa * size.x + ya];
 }

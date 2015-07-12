@@ -39,8 +39,17 @@ void Player::init(int x, int y, int w, int h)
 	keys["right"] = sf::Keyboard::D;
 }
 
-void Player::handle_events(sf::Event *ev)
+void Player::handle_events(sf::Event *event)
 {
+	sf::Event ev = *event;
+	if(ev.type == sf::Event::KeyPressed)
+	{
+		switch(ev.key.code)
+		{
+			default:
+			break;
+		}
+	}
 }
 
 void Player::render(sf::RenderWindow *win)
@@ -48,7 +57,53 @@ void Player::render(sf::RenderWindow *win)
 	win->draw(sprite);
 }
 
+bool Player::can_move(Tile* tile)
+{
+	if(!tile->can_pass())
+		return false;
+	return true;
+}
+
 void Player::move(sf::Time dt)
+{
+    vx = vy = 0;
+
+    if(!is_standard_movement)
+    {
+		if(sf::Keyboard::isKeyPressed(keys["up"])){
+			vx -= speed * cos(sprite.getRotation() * RADIAN);
+    		vy -= speed * sin(sprite.getRotation() * RADIAN);
+		}else if(sf::Keyboard::isKeyPressed(keys["down"])){
+			vx += speed * cos(sprite.getRotation()* RADIAN);
+    		vy += speed * sin(sprite.getRotation()* RADIAN);
+		}
+		if(sf::Keyboard::isKeyPressed(keys["right"])){
+			vx += speed * sin(sprite.getRotation() * RADIAN);
+			vy -= speed * cos(sprite.getRotation() * RADIAN);
+		}else if(sf::Keyboard::isKeyPressed(keys["left"])){
+			vx -= speed * sin(sprite.getRotation()* RADIAN);
+			vy += speed * cos(sprite.getRotation()* RADIAN);
+		}
+	}else{
+		if(sf::Keyboard::isKeyPressed(keys["up"])){
+			vy -= speed;
+			// vy -= 1;
+		}else if(sf::Keyboard::isKeyPressed(keys["down"])){
+			vy += speed;
+			// vy += 1;
+		}
+		if(sf::Keyboard::isKeyPressed(keys["right"])){
+			vx += speed;
+			// vx += 1;
+		}else if(sf::Keyboard::isKeyPressed(keys["left"])){
+			vx -= speed;
+			// vx -= 1;
+		}
+	}
+}
+
+//- DEPRECATED
+/*void Player::move(sf::Time dt)
 {
     vx = vy = 0;
 
@@ -81,8 +136,16 @@ void Player::move(sf::Time dt)
 		}
 	}
 
-	x += vx * dt.asSeconds();
-	y += vy * dt.asSeconds();
+	return sf::Vector2f(vx, vy);
+	// x += vx * dt.asSeconds();
+	// y += vy * dt.asSeconds();
+	// sprite.setPosition(sf::Vector2f(x, y));
+}*/
+
+void Player::move2(int xa, int ya, sf::Time dt)
+{
+	this->x += (xa) * dt.asSeconds();
+	this->y += (ya) * dt.asSeconds();
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 

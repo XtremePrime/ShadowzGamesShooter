@@ -19,7 +19,8 @@ IntroState* IntroState::instance(){
 
 void IntroState::init(Game* game)
 {
-	desktop = sf::VideoMode::getDesktopMode();
+	GAME_WIDTH = game->get_gameobject()->width;
+	GAME_HEIGHT = game->get_gameobject()->height;
 
 	//- Load font
 	font.loadFromFile("res/fonts/PressStart2P.ttf");
@@ -58,7 +59,10 @@ void IntroState::init(Game* game)
 
 	win_init();
 
-	std::cout << desktop.width << "/" << desktop.height << "\n";
+	//- Sound & Music init
+	music.openFromFile("res/music/mainmenu.flac");
+	if(game->get_gameobject()->has_music)
+		music.play();
 }
 
 void IntroState::win_init()
@@ -114,6 +118,7 @@ void IntroState::handle_events(Game* game, sf::Event event)
 						game->get_gameobject()->port = 7777;
 						game->get_gameobject()->ip_address = "127.0.0.1";
 						game->change_state(GameState::instance());
+						music.stop();
 					break;
 					case 1: //- Host
 						game->get_gameobject()->is_multiplayer = true;

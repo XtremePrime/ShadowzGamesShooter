@@ -16,6 +16,7 @@ void GameState::init(Game* game)
 {
 	this->ip_address = game->get_gameobject()->ip_address;
 	this->port = game->get_gameobject()->port;
+	this->has_sfx = game->get_gameobject()->has_sfx;
 
 	//- Binding to the port to establish connection
 	if (socket.bind(port) != sf::Socket::Done)
@@ -28,8 +29,27 @@ void GameState::init(Game* game)
 	// }
 
 	level.init("res/levels/devtest/");
-	player.init(game->get_gameobject(), 100, 100, 16, 32);
-	mob.init(150, 150, 16, 32);
+	player.init(game->get_gameobject(), 400, 400, 16, 32);
+	// mob.init(150, 150, 16, 32);
+
+	//- Music & Sound init
+	music.openFromFile("res/music/devtest.flac");
+	music.setLoop(true);
+	if(game->get_gameobject()->has_music)
+		music.play();
+
+	shoot_buf.loadFromFile("res/sfx/shootgun.wav");
+	shoot_snd.setBuffer(shoot_buf);
+
+	//- UI init
+	font.loadFromFile("res/fonts/PressStart2P.ttf");
+	score_txt.setPosition(200, 200);
+	score_txt.setCharacterSize(15);
+	score_txt.setFont(font);
+	score_txt.setColor(sf::Color::White);
+	score_txt.setString("Score: 0");
+
+	game->get_window()->setView(level.get_view());
 }
 
 void GameState::handle_events(Game* game, sf::Event event)
@@ -53,6 +73,13 @@ void GameState::handle_events(Game* game, sf::Event event)
 		if(event.mouseButton.button == sf::Mouse::Left)
 		{
     		bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()));
+    		if(has_sfx)
+    			shoot_snd.play();
+
+    		player.update_score(100);
+    		std::stringstream ss;
+    		ss << "Score: " << player.get_score();
+    		score_txt.setString(ss.str());
 		}
 	}else if(event.type == sf::Event::LostFocus){
 		pause();
@@ -63,9 +90,8 @@ void GameState::handle_events(Game* game, sf::Event event)
 	level.handle_events(&event);
 	if(!is_paused)
 	{
-		mob.handle_events(&event);
 		player.handle_events(&event);
-	}	
+	}
 }
 
 void GameState::update(Game* game,  sf::Time deltaTime)
@@ -73,22 +99,66 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- update EVERYTHING
 	if(is_paused){return;}
 	level.update(deltaTime);
-	mob.update(deltaTime);
 	player.update(deltaTime);
+	for(Mob* mob : mobs){
+		mob->update(deltaTime);
+	}
 	for(Bullet* bullet : bullets){
 		bullet->update(deltaTime);
 	}
 
+	//- Update player movement
+	float f = deltaTime.asSeconds();
+	#define t(xx, yy) xx+(yy*f)
+	std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
+	if(player.can_move(level.get_tile(t(player.get_x(),player.get_vx()), t(player.get_y(),player.get_vy()))))
+		player.move2(player.get_vx(), player.get_vy(), deltaTime);
+	#undef t
+
+	//- Check deletation of mobs
+	if(mobs.size() > 0)
+	{
+		for(int i = 0; i < mobs.size(); ++i){
+			if(mobs[i]->removed)
+			{
+				std::cout << "Deleting mob: " << i << "\n";
+				player.update_score(mobs[i]->get_points());
+				mobs[i] = nullptr;
+				mobs.erase(mobs.begin()+i);
+			}
+		}
+	}
+
+	//- Check collision of bullets w/ mobs & deletation
+	if(bullets.size() > 0)
+	{
+		// for(Bullet* bullet : bullets)
+		// {
+		// 	// if(mob.intersects(*bullet))
+		// 	// 	bullet->remove();
+		// }
+		for(int i = 0; i < bullets.size(); ++i){
+			if(bullets[i]->removed)
+			{
+				std::cout << "Deleting bullet: " << i << "\n";
+				bullets[i] = nullptr;
+				bullets.erase(bullets.begin()+i);
+			}
+		}
+	}
+
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
+	#define t(xr,yr) 5+xr-(yr/2)
+	score_txt.setPosition(t(player.get_x(), level.get_view().getSize().x), t(player.get_y(), level.get_view().getSize().y));
+	#undef t
 
 	//- Rotate mobs towards player loc.$
-	//@TODO: Still broken for mob, I don't care, let Razvan do it.
-	rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
+	// rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
 
 	//- Collision test!
-	if(player.intersects(mob))
-		std::cout << "Collision!\n";
+	// if(player.intersects(mob))
+	// 	std::cout << "Collision!\n";
 }
 
 //- Player specific rotate
@@ -137,12 +207,18 @@ void GameState::rotate2(Mob* mob, Game* game, sf::Time deltaTime, sf::Vector2i p
 void GameState::render(Game* game)
 {
 	//- render EVERYTHING
-	level.render(game->get_window(), player.get_x(), player.get_y());
-	mob.render(game->get_window());
+	level.render(game->get_window(), player.get_x(), player.get_y(), game->get_gameobject()->width, game->get_gameobject()->height);
+	game->get_window()->setView(level.get_view());
 	player.render(game->get_window());
+	for(Mob* mob : mobs){
+		mob->render(game->get_window());
+	}
 	for(Bullet* bullet : bullets){
 		bullet->render(game->get_window());
 	}
+
+	//- UI stuff is rendered over everything else
+	game->get_window()->draw(score_txt);
 }
 
 void GameState::cleanup()

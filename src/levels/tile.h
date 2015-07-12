@@ -16,12 +16,13 @@ public:
 
 	// Tile(int, int, std::string);
 	Tile(int, int, sf::Texture&);
+	Tile(int, int, bool, sf::Texture&);
 	// void init(int, int, std::string);
 	void init(int xx, int yy, sf::Texture&);
 	void render(sf::RenderWindow*);
 	void update(sf::Time);
 
-	bool can_pass(){ return is_collidable; }
+	bool can_pass(){ return !is_collidable; }
 	int get_x(){return this->x*SIZE;}
 	int get_y(){return this->y*SIZE;}
 	sf::Vector2i get_coord(){return sf::Vector2i(this->x, this->y);}

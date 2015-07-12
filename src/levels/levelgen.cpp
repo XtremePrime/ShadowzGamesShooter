@@ -47,9 +47,9 @@ void LevelGen::generate_map()
 
 		//- Set tiles based on colors in the map
 		if(is_color(color, 255, 255, 255))
-			tiles.push_back(new Tile(x, y, txmgr.get_ref("floor.png")));
+			tiles.push_back(new Tile(x, y, false, txmgr.get_ref("floor.png")));
 		else if(is_color(color, 0, 0, 0))
-			tiles.push_back(new Tile(x, y, txmgr.get_ref("wall.png")));
+			tiles.push_back(new Tile(x, y, true, txmgr.get_ref("wall.png")));
 		else{
 			if(custom_tiles.size() < 1){continue;}
 			for(it_type iterator = custom_tiles.begin(); iterator != custom_tiles.end(); iterator++)

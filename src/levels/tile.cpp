@@ -11,6 +11,12 @@ Tile::Tile(int xx, int yy, sf::Texture& tx)
 	init(xx, yy, tx);
 }
 
+Tile::Tile(int xx, int yy, bool solid, sf::Texture& tx)
+{
+	this->is_collidable = solid;
+	init(xx, yy, tx);
+}
+
 // void Tile::init(int xx, int yy, std::string filepath)
 // {
 // 	this->x = xx;
