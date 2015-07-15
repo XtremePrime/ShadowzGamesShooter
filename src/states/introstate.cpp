@@ -34,7 +34,7 @@ void IntroState::init(Game* game)
 		menu_options[i]->setColor(sf::Color::White);
 		// menu_options[i]->setCharacterSize(15);
 		// menu_options[i]->setFont(font);
-		
+
 	menu_options[0]->setString("START GAME (SINGLEPLAYER)");
 	menu_options[1]->setString("HOST");
 	menu_options[2]->setString("JOIN");
@@ -114,11 +114,11 @@ void IntroState::handle_events(Game* game, sf::Event event)
 				switch(selected_id)
 				{
 					case 0: //- Singleplayer
-						// game->get_gameobject()->is_multiplayer = false;
-						// game->get_gameobject()->port = 7777;
-						// game->get_gameobject()->ip_address = "127.0.0.1";
-						// game->change_state(GameState::instance());
-						// music.stop();
+						 game->get_gameobject()->is_multiplayer = false;
+						 game->get_gameobject()->port = 7777;
+						 game->get_gameobject()->ip_address = "127.0.0.1";
+						 game->change_state(GameState::instance());
+						 music.stop();
 					break;
 					case 1: //- Host
 						game->get_gameobject()->is_multiplayer = true;
