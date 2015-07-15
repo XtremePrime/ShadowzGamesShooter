@@ -24,6 +24,7 @@ void Mob::init(int x, int y, int w, int h)
 	this->y = y;
 	this->w = w;
 	this->h = h;
+	this->health = 100;
 	texture.loadFromFile("res/models/enemymodel.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
@@ -60,7 +61,7 @@ void Mob::handle_events(sf::Event *event)
 
 void Mob::update(sf::Time deltaTime)
 {
-	if(hp <= 0){
+	if(health <= 0){
 		remove();
 	}
 	this->bbox = sprite.getGlobalBounds();
