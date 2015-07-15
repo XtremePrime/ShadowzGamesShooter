@@ -27,7 +27,7 @@ public:
 	bool is_standard_movement = true;
 	bool has_music = true;
 	bool has_sfx = true;
-	std::string version = "v0.3";
+	std::string version = "pre-v0.3";
 };
 
 #endif // GAMEOBJECT_H

@@ -4,12 +4,15 @@
 #include "states/introstate.h"
 
 #include <fstream>
+#include <direct.h>
 
 void Game::init()
 {
 	//- Init GameObject stuff
 	char* tmp = getenv("APPDATA");
 	gameobject.appdata.assign(tmp);
+	std::string str = gameobject.appdata+"\\ShadowzGames";
+	mkdir(str.c_str());
 	gameobject.appdata = gameobject.appdata+"\\ShadowzGames\\";
 
 	create_files(has_files());
