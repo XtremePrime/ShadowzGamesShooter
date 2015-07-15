@@ -5,7 +5,7 @@
 
 Mob::Mob()
 {
-	
+
 }
 
 Mob::Mob(int x, int y, int w, int h)
@@ -31,9 +31,25 @@ void Mob::init(int x, int y, int w, int h)
 	// sprite.setSize(sf::Vector2f(w, h));
 	sprite.setPosition(sf::Vector2f(x, y));
 	sprite.setOrigin(w/2, h/2);
-	// vx = vy = 0;	
+	// vx = vy = 0;
 
 	this->bbox = sprite.getGlobalBounds();
+}
+
+void Mob::move(sf::Vector2f c)
+{
+    this->x +=x;
+    this->y += y;
+
+    //- Set direction
+	if(y == -1)
+		dir = Direction::UP;
+	else if(y == 1)
+		dir = Direction::DOWN;
+	if(x == -1)
+		dir = Direction::LEFT;
+	else if(x == 1)
+		dir = Direction::RIGHT;
 }
 
 void Mob::handle_events(sf::Event *event)

@@ -19,6 +19,7 @@ public:
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
     void render(sf::RenderWindow *win);
+     void move(sf::Vector2f);
 
     int get_points(){return this->points;}
 

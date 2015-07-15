@@ -15,6 +15,8 @@ protected:
     sf::FloatRect bbox;
 public:
     bool removed = false;
+    enum Direction{UP,DOWN,LEFT,RIGHT};
+    Direction dir;
 
     virtual void init(int x, int y, int w, int h) = 0;
 	virtual void render(sf::RenderWindow *win) = 0;
