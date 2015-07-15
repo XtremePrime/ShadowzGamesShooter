@@ -28,7 +28,7 @@ void GameState::init(Game* game)
    		// std::cout << "Sent bby\n";
 	// }
 
-	level.init("res/levels/devtest/");
+	level.init("res/levels/demons/");
 	player.init(game->get_gameobject(), 400, 400, 16, 32);
 	mobs.push_back(new Mob(150, 150, 16, 32));
 	// mob.init(150, 150, 16, 32);
