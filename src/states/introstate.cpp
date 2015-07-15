@@ -114,19 +114,11 @@ void IntroState::handle_events(Game* game, sf::Event event)
 				switch(selected_id)
 				{
 					case 0: //- Singleplayer
-<<<<<<< HEAD
 						 game->get_gameobject()->is_multiplayer = false;
 						 game->get_gameobject()->port = 7777;
 						 game->get_gameobject()->ip_address = "127.0.0.1";
 						 game->change_state(GameState::instance());
 						 music.stop();
-=======
-						game->get_gameobject()->is_multiplayer = false;
-						game->get_gameobject()->port = 7777;
-						game->get_gameobject()->ip_address = "127.0.0.1";
-						game->change_state(GameState::instance());
-						music.stop();
->>>>>>> origin/master
 					break;
 					case 1: //- Host
 						// game->get_gameobject()->is_multiplayer = true;
