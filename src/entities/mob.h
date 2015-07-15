@@ -8,7 +8,7 @@
 class Mob : public Entity
 {
 protected:
-	int speed = 200, hp;
+	int speed = 200, health;
     int points = 100;
 	sf::RectangleShape rect;
 public:
@@ -19,11 +19,10 @@ public:
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
     void render(sf::RenderWindow *win);
-     void move(sf::Vector2f);
+    void move(sf::Vector2f);
 
     int get_points(){return this->points;}
-
-    // int get_hp() { return this->hp; }
+    int get_hp() { return this->health; }
     // int get_dmg() { return this->dmg; }
     // bool get_death() { return this->is_dead; }
 };
