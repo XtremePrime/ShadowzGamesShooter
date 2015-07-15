@@ -111,7 +111,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Update player movement
 	float f = deltaTime.asSeconds();
 	#define t(xx, yy) xx+(yy*f)
-	std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
+	// std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
 	if(player.can_move(level.get_tile(t(player.get_x(),player.get_vx()), t(player.get_y(),player.get_vy()))))
 		player.move2(player.get_vx(), player.get_vy(), deltaTime);
 	#undef t
