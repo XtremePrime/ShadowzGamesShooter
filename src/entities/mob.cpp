@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cmath>
 
+
+
 Mob::Mob()
 {
 
@@ -39,8 +41,17 @@ void Mob::init(int x, int y, int w, int h)
 
 void Mob::move(sf::Vector2f c)
 {
-    this->x +=x;
-    this->y += y;
+    int xx,yy;
+
+    do{
+        xx=get_x();
+        yy=get_y();
+        if (x<xx) xx+= xx;
+           else x-=xx;
+        if(y<yy) yy+=yy;
+           else yy-=yy;
+
+    }while((x!=xx)||(y!=yy));
 
     //- Set direction
 	if(y == -1)

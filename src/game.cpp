@@ -3,6 +3,7 @@
 #include "states/gamestate.h"
 #include "states/introstate.h"
 
+
 #include <fstream>
 #include <direct.h>
 
@@ -183,6 +184,7 @@ void Game::update(sf::Time dt)
 {
 	//- Update current state
 	state_stack.back()->update(this, dt);
+
 }
 
 void Game::render(sf::RenderWindow &window)
