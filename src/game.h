@@ -34,10 +34,7 @@ public:
 	void pop_state();
 
 	void run();
-	void quit(){
-		this->is_running = false;
-		this->window.close();
-	}
+	void quit();
 
 	sf::RenderWindow* get_window() { return &window; }
 	GameObject* get_gameobject() { return &gameobject; }

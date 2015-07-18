@@ -224,6 +224,9 @@ void GameState::render(Game* game)
 
 void GameState::cleanup()
 {
+	clear_vector(mobs);
+	clear_vector(bullets);
+
 	_instance = NULL;
 }
 

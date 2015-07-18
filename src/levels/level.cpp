@@ -8,6 +8,8 @@ void Level::init(std::string filepath)
 	gen.init(filepath);
 	gen.generate_map();
 
+	splist.init(filepath);
+
 	view.reset(sf::FloatRect(0, 0, 860, 640));
 
 	TOTAL_TILES = gen.get_tiles().size();

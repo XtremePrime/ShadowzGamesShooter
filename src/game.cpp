@@ -244,3 +244,9 @@ void Game::run()
 		render(window);
 	}
 }
+
+void Game::quit()
+{
+	this->is_running = false;
+	this->window.close();
+}

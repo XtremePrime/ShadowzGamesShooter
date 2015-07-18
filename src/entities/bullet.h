@@ -17,7 +17,7 @@ protected:
     void move(sf::Time);
 public:
 	Bullet(int, int, float);
-	~Bullet();
+	~Bullet(){}
 	void init(int x, int y, int w, int h);
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);

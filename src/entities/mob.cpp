@@ -39,18 +39,18 @@ void Mob::init(int x, int y, int w, int h)
 
 void Mob::move(sf::Vector2f c)
 {
-    this->x +=x;
-    this->y += y;
+ //    this->x +=x;
+ //    this->y += y;
 
-    //- Set direction
-	if(y == -1)
-		dir = Direction::UP;
-	else if(y == 1)
-		dir = Direction::DOWN;
-	if(x == -1)
-		dir = Direction::LEFT;
-	else if(x == 1)
-		dir = Direction::RIGHT;
+ //    //- Set direction
+	// if(y == -1)
+	// 	dir = Direction::UP;
+	// else if(y == 1)
+	// 	dir = Direction::DOWN;
+	// if(x == -1)
+	// 	dir = Direction::LEFT;
+	// else if(x == 1)
+		// dir = Direction::RIGHT;
 }
 
 void Mob::handle_events(sf::Event *event)

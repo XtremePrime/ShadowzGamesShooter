@@ -32,7 +32,8 @@ void Tile::init(int xx, int yy, sf::Texture& tx)
 	this->y = yy;
 	// this->texture.loadFromFile(filepath);
 	this->sprite.setTexture(tx);
-	this->sprite.setPosition(x*SIZE, y*SIZE);	
+	this->sprite.setPosition(x*SIZE, y*SIZE);
+	this->bbox = sprite.getGlobalBounds();
 }
 
 void Tile::update(sf::Time deltaTime)
