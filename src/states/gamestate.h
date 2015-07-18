@@ -24,6 +24,8 @@ private:
 	bool is_paused = false;
 	bool has_sfx;
 
+	Mob mob;
+
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
 	sf::IpAddress ip_address;

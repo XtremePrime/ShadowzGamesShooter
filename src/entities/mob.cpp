@@ -39,19 +39,16 @@ void Mob::init(int x, int y, int w, int h)
 	this->bbox = sprite.getGlobalBounds();
 }
 
-void Mob::move(sf::Vector2f c)
+void Mob::move(int xp, int yp)
 {
-    int xx,yy;
+     if(x != xp)
+                x += abs(x-xp);
 
-    do{
-        xx=get_x();
-        yy=get_y();
-        if (x<xx) xx+= xx;
-           else x-=xx;
-        if(y<yy) yy+=yy;
-           else yy-=yy;
+     if(y != yp)
+                y += abs(y-yp);
 
-    }while((x!=xx)||(y!=yy));
+
+
 
     //- Set direction
 	if(y == -1)

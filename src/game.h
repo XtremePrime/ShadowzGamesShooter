@@ -28,6 +28,7 @@ private:
 	void update(sf::Time);
 	void handle_events(sf::Event);
 	void render(sf::RenderWindow&);
+
 public:
 	void change_state(State* state);
 	void push_state(State* state);
