@@ -44,9 +44,13 @@ void Mob::move2(int xp, int yp)
 {
 
      if(this->x<xp)
-                this->x++ * speed;
+                this->x++ *speed;
      if(this->x>xp)
-                this->x-- * speed;
+                this->x-- *speed;
+     if(this->y<yp)
+                this->y++ *speed;
+     if(this->y>yp)
+                this->y-- *speed;
 
 
 	sprite.setPosition(sf::Vector2f(x, y));
