@@ -1,0 +1,44 @@
+﻿Merge remote-tracking branch 'origin/master'
+
+Conflicts:
+	src/entities/mob.cpp
+	src/states/gamestate.h
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 3 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   ShadowzGamesShooter.cbp
+#	deleted:    res/levels/devtest/Thumbs.db
+#	new file:   res/levels/devtest/spawnpoints.txt
+#	modified:   src/entities/bullet.h
+#	modified:   src/entities/mob.cpp
+#	modified:   src/entities/player.cpp
+#	modified:   src/game.cpp
+#	modified:   src/game.h
+#	modified:   src/gameobject.hpp
+#	modified:   src/levels/level.cpp
+#	modified:   src/levels/level.h
+#	modified:   src/levels/levelgen.h
+#	new file:   src/levels/spawnpoint.cpp
+#	new file:   src/levels/spawnpoint.h
+#	new file:   src/levels/spawnpointlist.cpp
+#	new file:   src/levels/spawnpointlist.h
+#	modified:   src/levels/tile.cpp
+#	modified:   src/levels/tile.h
+#	modified:   src/states/gamestate.cpp
+#	modified:   src/states/gamestate.h
+#
+

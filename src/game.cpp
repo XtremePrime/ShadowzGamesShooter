@@ -184,7 +184,6 @@ void Game::update(sf::Time dt)
 {
 	//- Update current state
 	state_stack.back()->update(this, dt);
-    Mob.move(player.get_x(), player.get_y());
 }
 
 void Game::render(sf::RenderWindow &window)
@@ -245,4 +244,10 @@ void Game::run()
 		update(clock.restart());
 		render(window);
 	}
+}
+
+void Game::quit()
+{
+	this->is_running = false;
+	this->window.close();
 }

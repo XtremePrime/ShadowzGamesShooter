@@ -1,8 +1,9 @@
-#include "levelgen.h"
-#include "tile.h"
-
 #ifndef LEVEL_H
 #define LEVEL_H
+
+#include "levelgen.h"
+#include "tile.h"
+#include "spawnpointlist.h"
 
 class Level
 {
@@ -11,6 +12,7 @@ private:
 	sf::View view;
 	sf::Vector2u map_size;
 	int TOTAL_TILES;
+	SpawnPointList splist;
 public:
 	void init(std::string);
 	void handle_events(sf::Event*);

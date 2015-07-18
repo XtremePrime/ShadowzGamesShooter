@@ -28,6 +28,7 @@ public:
 	bool has_music = true;
 	bool has_sfx = true;
 	std::string version = "pre-v0.3";
+	std::string username = "In-Dev Player";
 };
 
 #endif // GAMEOBJECT_H

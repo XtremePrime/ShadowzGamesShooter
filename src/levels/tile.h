@@ -11,6 +11,7 @@ private:
 	int x, y;
 	bool is_hazard = false;
 	bool is_collidable = false;
+	sf::FloatRect bbox;
 public:
 	const int SIZE = 32;
 
@@ -28,6 +29,7 @@ public:
 	sf::Vector2i get_coord(){return sf::Vector2i(this->x, this->y);}
 	void set_x(int xx){this->x=xx;}
 	void set_y(int yy){this->y=yy;}
+	sf::FloatRect& get_bbox() { return this->bbox; }
 };
 
 #endif // TILE_H

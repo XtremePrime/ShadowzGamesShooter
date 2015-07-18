@@ -160,6 +160,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Collision test!
 	// if(player.intersects(mob))
 	// 	std::cout << "Collision!\n";
+	mob.update(deltaTime);
+    mob.move(player.get_x(), player.get_y());
 }
 
 //- Player specific rotate
@@ -218,12 +220,17 @@ void GameState::render(Game* game)
 		bullet->render(game->get_window());
 	}
 
+    mob.render(game->get_window());
+
 	//- UI stuff is rendered over everything else
 	game->get_window()->draw(score_txt);
 }
 
 void GameState::cleanup()
 {
+	clear_vector(mobs);
+	clear_vector(bullets);
+
 	_instance = NULL;
 }
 
