@@ -30,7 +30,8 @@ void GameState::init(Game* game)
 
 	level.init("res/levels/devtest/");
 	player.init(game->get_gameobject(), 400, 400, 16, 32);
-	mobs.push_back(new Mob(150, 150, 16, 32));
+	// mobs.push_back(new Mob(150, 150, 16, 32));
+	mob.init(150, 150, 16, 32);
 	// mob.init(150, 150, 16, 32);
 
 	//- Music & Sound init
@@ -148,6 +149,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		}
 	}
 
+
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
 	#define t(xr,yr) 5+xr-(yr/2)
@@ -161,7 +163,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	// if(player.intersects(mob))
 	// 	std::cout << "Collision!\n";
 	mob.update(deltaTime);
-    mob.move(player.get_x(), player.get_y());
+    mob.move2(player.get_x(), player.get_y());
 }
 
 //- Player specific rotate

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#define RADIAN (3.14159265 / 180.)
 
 
 
@@ -39,14 +40,22 @@ void Mob::init(int x, int y, int w, int h)
 	this->bbox = sprite.getGlobalBounds();
 }
 
-void Mob::move(int xp, int yp)
+void Mob::move2(int xp, int yp)
 {
-     if(x != xp)
-                x += x-xp;
 
-     if(y != yp)
-                y += y-yp;
+     if(this->x<xp)
+                this->x++ * speed;
+     if(this->x>xp)
+                this->x-- * speed;
 
+
+    if(this->y<yp)
+                this->y++ * speed;
+    if(this->y>yp)
+                this->y-- * speed;
+
+
+    this->sprite.setPosition(sf::Vector2f(this->x, this->y));
 
 
 
