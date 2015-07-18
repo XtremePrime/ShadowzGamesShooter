@@ -48,7 +48,7 @@ void Mob::move(int xp, int yp)
                 y += y-yp;
 
 
-
+	sprite.setPosition(sf::Vector2f(x, y));
 
 
    /* //- Set direction

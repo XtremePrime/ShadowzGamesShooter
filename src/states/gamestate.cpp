@@ -30,8 +30,8 @@ void GameState::init(Game* game)
 
 	level.init("res/levels/devtest/");
 	player.init(game->get_gameobject(), 400, 400, 16, 32);
-	mobs.push_back(new Mob(150, 150, 16, 32));
-	// mob.init(150, 150, 16, 32);
+	// mobs.push_back(new Mob(150, 150, 16, 32));
+	mob.init(150, 150, 16, 32);
 
 	//- Music & Sound init
 	music.openFromFile("res/music/devtest.flac");
