@@ -151,6 +151,6 @@ void Player::move2(int xa, int ya, sf::Time dt)
 
 void Player::update(sf::Time deltaTime)
 {
-	// move(deltaTime);
+	move(deltaTime);
 	this->bbox = sprite.getGlobalBounds();
 }
