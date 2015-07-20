@@ -115,8 +115,18 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	float f = deltaTime.asSeconds();
 	#define t(xx, yy) xx+(yy*f)
 	// std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
-	// if(player.can_move(level.get_tile(t(player.get_x(),player.get_vx()), t(player.get_y(),player.get_vy()))))
-		player.move2(player.get_vx(), player.get_vy(), deltaTime);
+	if(!level.is_oob(player.get_x(), player.get_y())){
+		if( player.can_move( level.get_tile( t(player.get_y(),player.get_vy()),t(player.get_x(),player.get_vx()) ) ) ){
+			player.set_lx(player.get_x());
+			player.set_ly(player.get_y());
+			player.move2(player.get_vx(), player.get_vy(), deltaTime);
+		}
+	}else{
+		player.set_x(player.get_lx());
+		player.set_y(player.get_ly());
+		std::cout << "OOB!\n";
+	}
+
 	#undef t
 
 	//- Check deletation of mobs
@@ -136,15 +146,15 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Check collision of bullets w/ mobs & deletation
 	if(bullets.size() > 0)
 	{
-		// for(Bullet* bullet : bullets)
-		// {
-		// 	// if(mob.intersects(*bullet))
-		// 	// 	bullet->remove();
-		// }
+		for(Bullet* bullet : bullets)
+		{
+			if(mob.intersects(*bullet))
+				bullet->remove();
+		}
 		for(int i = 0; i < bullets.size(); ++i){
 			if(bullets[i]->removed)
 			{
-				std::cout << "Deleting bullet: " << i << "\n";
+				// std::cout << "Deleting bullet: " << i << "\n";
 				bullets[i] = nullptr;
 				bullets.erase(bullets.begin()+i);
 			}

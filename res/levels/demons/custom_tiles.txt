@@ -1,8 +1,9 @@
-asd.png 150 0 0 250
-gr1.1_dem.png 90 0 0 250
-gr1.4_dem.png 90 90 90 250
-ground1.3_dem.png 120 120 120 250
-nasu.png 150 150 150 250
-dirt-floor1.png 0 150 0 250
-dirt-floor2.png 100 150 0 250
-dirt-floor3.png 0 150 100 250
+asd.png 150 0 0 255
+gr1.1_dem.png 90 0 0 255
+gr1.4_dem.png 90 90 90 255
+ground1.3_dem.png 120 120 120 255
+nasu.png 150 150 150 255
+dirt-floor1.png 0 150 0 255
+dirt-floor2.png 100 150 0 255
+dirt-floor3.png 0 150 100 255
+dirt-floor4.png 50 150 50 255

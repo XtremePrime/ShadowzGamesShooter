@@ -7,6 +7,7 @@ void Level::init(std::string filepath)
 {
 	gen.init(filepath);
 	gen.generate_map();
+	this->map_size = gen.get_map_size();
 
 	splist.init(filepath);
 
@@ -66,4 +67,10 @@ Tile* Level::get_tile(int x, int y)
 	int xa = floor(x/32);
 	int ya = floor(y/32);
 	return gen.get_tiles()[xa * size.x + ya];
+}
+
+bool Level::is_oob(int xp, int yp)
+{
+	// std::cout << xp << "," << yp << " vs " << map_size.x*32-32 << "," << map_size.y*32-32 << "\n";
+	return (xp < 0) || (xp >= map_size.x*32-32) || (yp < 0) || (yp >= map_size.y*32-32);
 }

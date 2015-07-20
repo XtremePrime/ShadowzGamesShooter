@@ -36,8 +36,8 @@ void LevelGen::generate_map()
 	sf::Image map;
 	map.loadFromFile(this->path+"map.png");
 
-
 	size = map.getSize();
+
 	sf::Clock timer;
 	for(int i = 0; i < size.x*size.y; ++i)
 

@@ -9,7 +9,7 @@
 class Player : public Mob
 {
 private:
-	int x, y, vx, vy;
+	int x, y, vx, vy, lx, ly;
 	sf::Vector2f acceleration;
 	int score = 0;
 	std::map<std::string, sf::Keyboard::Key> keys;
@@ -26,6 +26,12 @@ public:
 
 	int get_x(){return this->x;}
 	int get_y(){return this->y;}
+	void set_x(int xx){this->x = xx;}
+	void set_y(int yy){this->y = yy;}
+	int get_lx(){return this->lx;}
+	int get_ly(){return this->ly;}
+	void set_lx(int xx){this->lx = xx;}
+	void set_ly(int yy){this->ly = yy;}
 	int get_vx(){return this->vx;}
 	int get_vy(){return this->vy;}
 	sf::Keyboard::Key get_key(std::string key) { return keys[key]; }
