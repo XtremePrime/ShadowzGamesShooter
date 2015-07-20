@@ -1,11 +1,11 @@
+#ifndef LEVELGEN_H
+#define LEVELGEN_H
+
 #include "tile.h"
 #include <iostream>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "../texturemanager.h"
-
-#ifndef LEVELGEN_H
-#define LEVELGEN_H
 
 class LevelGen
 {

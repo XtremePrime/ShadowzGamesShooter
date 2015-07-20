@@ -3,6 +3,7 @@
 #include "states/gamestate.h"
 #include "states/introstate.h"
 
+
 #include <fstream>
 #include <direct.h>
 
@@ -243,4 +244,10 @@ void Game::run()
 		update(clock.restart());
 		render(window);
 	}
+}
+
+void Game::quit()
+{
+	this->is_running = false;
+	this->window.close();
 }

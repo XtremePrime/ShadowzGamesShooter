@@ -62,6 +62,10 @@
 		<Unit filename="src/levels/level.h" />
 		<Unit filename="src/levels/levelgen.cpp" />
 		<Unit filename="src/levels/levelgen.h" />
+		<Unit filename="src/levels/spawnpoint.cpp" />
+		<Unit filename="src/levels/spawnpoint.h" />
+		<Unit filename="src/levels/spawnpointlist.cpp" />
+		<Unit filename="src/levels/spawnpointlist.h" />
 		<Unit filename="src/levels/tile.cpp" />
 		<Unit filename="src/levels/tile.h" />
 		<Unit filename="src/main.cpp" />

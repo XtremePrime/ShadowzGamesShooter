@@ -24,6 +24,14 @@ private:
 	bool is_paused = false;
 	bool has_sfx;
 
+
+	Mob mob;
+
+	//- Timing stuff
+	sf::Clock item_cl;
+	sf::Clock mobs_cl;
+
+
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
 	sf::IpAddress ip_address;
@@ -54,6 +62,14 @@ public:
 
  	void pause();
  	void resume();
+
+ 	template<typename T>
+ 	void clear_vector(std::vector<T*>& v)
+ 	{
+ 		for(int i = 0; i < v.size(); ++i)
+ 			delete (v[i]);
+ 		v.clear();
+ 	}
 };
 
 #endif // GAMESTATE_H

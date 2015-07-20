@@ -11,6 +11,7 @@ protected:
 	int speed = 200, health;
     int points = 100;
 	sf::RectangleShape rect;
+
 public:
     Mob();
 	Mob(int, int, int, int);
@@ -19,7 +20,7 @@ public:
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
     void render(sf::RenderWindow *win);
-    void move(sf::Vector2f);
+    void move2(int xp, int yp);
 
     int get_points(){return this->points;}
     int get_hp() { return this->health; }

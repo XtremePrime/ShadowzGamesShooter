@@ -30,8 +30,11 @@ void GameState::init(Game* game)
 
 	level.init("res/levels/demons/");
 	player.init(game->get_gameobject(), 400, 400, 16, 32);
-	mobs.push_back(new Mob(150, 150, 16, 32));
+	// mobs.push_back(new Mob(150, 150, 16, 32));
+	mob.init(150, 150, 16, 32);
+
 	// mob.init(150, 150, 16, 32);
+
 
 	//- Music & Sound init
 	music.openFromFile("res/music/devtest.flac");
@@ -111,8 +114,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Update player movement
 	float f = deltaTime.asSeconds();
 	#define t(xx, yy) xx+(yy*f)
-	std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
-	if(player.can_move(level.get_tile(t(player.get_x(),player.get_vx()), t(player.get_y(),player.get_vy()))))
+	// std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
+	// if(player.can_move(level.get_tile(t(player.get_x(),player.get_vx()), t(player.get_y(),player.get_vy()))))
 		player.move2(player.get_vx(), player.get_vy(), deltaTime);
 	#undef t
 
@@ -148,6 +151,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		}
 	}
 
+
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
 	#define t(xr,yr) 5+xr-(yr/2)
@@ -160,6 +164,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Collision test!
 	// if(player.intersects(mob))
 	// 	std::cout << "Collision!\n";
+	mob.update(deltaTime);
+    mob.move2(player.get_x(), player.get_y());
 }
 
 //- Player specific rotate
@@ -218,12 +224,17 @@ void GameState::render(Game* game)
 		bullet->render(game->get_window());
 	}
 
+    mob.render(game->get_window());
+
 	//- UI stuff is rendered over everything else
 	game->get_window()->draw(score_txt);
 }
 
 void GameState::cleanup()
 {
+	clear_vector(mobs);
+	clear_vector(bullets);
+
 	_instance = NULL;
 }
 
