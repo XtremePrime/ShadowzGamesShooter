@@ -29,9 +29,9 @@ void GameState::init(Game* game)
 	// }
 
 	level.init("res/levels/demons/");
-	player.init(game->get_gameobject(), 400, 400, 16, 32);
+	player.init(game->get_gameobject(), 400, 400, 32, 32);
 	// mobs.push_back(new Mob(150, 150, 16, 32));
-	mob.init(150, 150, 16, 32);
+	mob.init(150, 150, 32, 32);
 
 	// mob.init(150, 150, 16, 32);
 
@@ -149,7 +149,11 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		for(Bullet* bullet : bullets)
 		{
 			if(mob.intersects(*bullet))
+			{
 				bullet->remove();
+				mob.damage(1);
+				std::cout << mob.get_hp() << "\n";
+			}
 		}
 		for(int i = 0; i < bullets.size(); ++i){
 			if(bullets[i]->removed)
@@ -169,7 +173,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	#undef t
 
 	//- Rotate mobs towards player loc.$
-	// rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
+	rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
 
 	//- Collision test!
 	// if(player.intersects(mob))

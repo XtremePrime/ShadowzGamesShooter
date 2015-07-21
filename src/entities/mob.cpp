@@ -27,8 +27,8 @@ void Mob::init(int x, int y, int w, int h)
 	this->y = y;
 	this->w = w;
 	this->h = h;
-	this->health = 100;
-	texture.loadFromFile("res/models/enemymodel.png");
+	this->health = 10;
+	texture.loadFromFile("res/models/player_1.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
 	sprite.rotate(-90);

@@ -24,7 +24,7 @@ void Player::init(int x, int y, int w, int h)
 	this->speed = 250;
 
 	//- Init sprite
-	texture.loadFromFile("res/models/playermodel.png");
+	texture.loadFromFile("res/models/player_1.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
 	sprite.rotate(-90);

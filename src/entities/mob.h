@@ -24,6 +24,7 @@ public:
 
     int get_points(){return this->points;}
     int get_hp() { return this->health; }
+    void damage(int dmg) { this->health -= dmg; }
     // int get_dmg() { return this->dmg; }
     // bool get_death() { return this->is_dead; }
 };
