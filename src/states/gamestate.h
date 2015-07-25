@@ -47,8 +47,7 @@ private:
 
 	void rotate(Player*, Game*, sf::Time);
 	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);
-	bool hitsPlayer(Tile*, Player);
-	void player_hurt(Player p, int dmg);
+
 protected:
 	static GameState* _instance;
 	GameState(){}
