@@ -151,8 +151,14 @@ void Player::move2(int xa, int ya, sf::Time dt)
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 
+
+
 void Player::update(sf::Time deltaTime)
 {
 	move(deltaTime);
 	this->bbox = sprite.getGlobalBounds();
+	if(this->health <= 0)
+		is_dead = true;
+
+
 }

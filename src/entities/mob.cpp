@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <SFML/Graphics.hpp>
 #define RADIAN (3.14159265 / 180.)
 
 
@@ -69,6 +70,8 @@ void Mob::move2(int xp, int yp)
 
 */
 }
+
+
 
 void Mob::handle_events(sf::Event *event)
 {

@@ -165,6 +165,12 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		}
 	}
 
+	if(mob.intersects (player)){
+       player.hp -= mob.dmg;
+       std::cout <<"Player hp "<<player.hp <<"\n";
+	}
+
+
 
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
@@ -180,6 +186,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	// 	std::cout << "Collision!\n";
 	mob.update(deltaTime);
     mob.move2(player.get_x(), player.get_y());
+    player.update(deltaTime);
 }
 
 //- Player specific rotate
@@ -243,6 +250,20 @@ void GameState::render(Game* game)
 	//- UI stuff is rendered over everything else
 	game->get_window()->draw(score_txt);
 }
+/*void player_hurt(Player p, Mob m){
+    p.hp -= m.dmg;
+    std::cout<<"========"<<p.hp<<"=========";
+    p.update(deltaTime);
+}
+
+bool hitsPlayer(Player p, Mob m){
+    if(m.intersects (p))
+        player_hurt(p,m);
+        std::cout<<"========"<<p.hp<<"=========";
+
+
+}
+*/
 
 void GameState::cleanup()
 {
