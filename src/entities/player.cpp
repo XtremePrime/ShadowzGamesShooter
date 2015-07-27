@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <SFML/System.hpp>
+#include <ctime>
 
 #define RADIAN (3.14159265 / 180.)
 
@@ -151,14 +153,33 @@ void Player::move2(int xa, int ya, sf::Time dt)
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 
+/*bool was_hurt (Mob* mob){
+if(mob->intersects (this)) return true;
+return false;
+
+}
+*/
+
 
 
 void Player::update(sf::Time deltaTime)
 {
 	move(deltaTime);
+	/*if (was_hurt(p , Mob)== true){
+        bool hurt= true;
+        sf::Clock clock;
+        sf::Clock elapsed;
+        float time = clock.restart().asSeconds();
+        bool invulnerable = true;
+
+      //  if((float) elapsed.asSeconds() == 2.0f)
+            invulnerable - false;
+            hurt = false;
+	}
 	this->bbox = sprite.getGlobalBounds();
 	if(this->health <= 0)
 		is_dead = true;
+		*/
 
 
 }

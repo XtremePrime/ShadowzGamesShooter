@@ -25,6 +25,7 @@ public:
     void render(sf::RenderWindow *win);
     void move2(int xp, int yp);
     int dmg=10;
+//    bool hasCollision(Tile* tile);
 
     int get_points(){return this->points;};
     int get_hp() { return this->health; };

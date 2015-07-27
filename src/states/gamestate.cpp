@@ -5,7 +5,7 @@
 #include <sstream>
 
 GameState* GameState::_instance;
-
+sf::Clock cl;
 GameState* GameState::instance(){
 	if(_instance == NULL)
 		_instance = new GameState();
@@ -17,7 +17,7 @@ void GameState::init(Game* game)
 	this->ip_address = game->get_gameobject()->ip_address;
 	this->port = game->get_gameobject()->port;
 	this->has_sfx = game->get_gameobject()->has_sfx;
-
+     sf::Clock cl;
 	//- Binding to the port to establish connection
 	if (socket.bind(port) != sf::Socket::Done)
 		std::cout << "Could not connect to: " << "localhost" << "!\n";
@@ -100,6 +100,7 @@ void GameState::handle_events(Game* game, sf::Event event)
 
 void GameState::update(Game* game,  sf::Time deltaTime)
 {
+
 	//- update EVERYTHING
 	if(is_paused){return;}
 	level.update(deltaTime);
@@ -165,9 +166,24 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		}
 	}
 
-	if(mob.intersects (player)){
-       player.hp -= mob.dmg;
+
+	if(mob.x==player.x && mob.y==player.y){
+       //player.hp -= mob.dmg;
+
+
+        sf::Time elapsed1 = cl.getElapsedTime();
+        int time = (int) elapsed1.asSeconds();
+        if(time%2==1)
+        {
+            player.hp -= mob.dmg;
+            cl.restart();
+        }
+
+        if(player.hp<=0)
+            player.is_dead=true;
+        std::cout<<time<<" ";
        std::cout <<"Player hp "<<player.hp <<"\n";
+
 	}
 
 

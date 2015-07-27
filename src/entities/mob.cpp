@@ -70,6 +70,12 @@ void Mob::move2(int xp, int yp)
 
 */
 }
+/*bool Mob::hasCollision(Tile* tile)
+{
+	if(tile->may_pass() == true)
+		return false;
+	return true;
+}*/
 
 
 

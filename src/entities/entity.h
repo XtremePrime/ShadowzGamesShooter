@@ -9,13 +9,14 @@ class Entity
 {
 protected:
     std::string name;
-    int x, y, w, h;
+
 
     sf::Texture texture;
     sf::Sprite sprite;
     sf::FloatRect bbox;
 public:
     bool removed = false;
+    int x, y, w, h;
     enum Direction{UP,DOWN,LEFT,RIGHT};
     Direction dir;
 
