@@ -52,7 +52,7 @@ void GameState::init(Game* game)
 	score_txt.setFont(font);
 	score_txt.setColor(sf::Color::White);
 	score_txt.setString("Score: 0");
-	hud.init(font);
+	hud.init(font, game->get_gameobject()->width, game->get_gameobject()->height);
 
 	game->get_window()->setView(level.get_view());
 }
@@ -205,6 +205,10 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     mob.move2(player.get_x(), player.get_y());
     player.update(deltaTime);
     hud.update(deltaTime, player, level);
+
+	#define t(xr,yr,zr) (xr+zr)-(yr/2)
+    game->get_cursor()->setPosition(t(player.get_x(), level.get_view().getSize().x, game->get_cursor()->getPosition().x), t(player.get_y(), level.get_view().getSize().y, game->get_cursor()->getPosition().y));
+    #undef t
 }
 
 //- Player specific rotate

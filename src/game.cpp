@@ -23,6 +23,11 @@ void Game::init()
 	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game "+gameobject.version, sf::Style::Titlebar | sf::Style::Close);
 	this->window.setVerticalSyncEnabled(true);
 	this->window.setKeyRepeatEnabled(false);
+	this->window.setMouseCursorVisible(false);
+
+	//- Change cursor
+	cursor_txr.loadFromFile("res/screen/cursor.png");
+	cursor.setTexture(cursor_txr);
 
 	//- Handle RNG
 	srand(time(NULL));
@@ -182,6 +187,7 @@ void Game::handle_events(sf::Event ev)
 
 void Game::update(sf::Time dt)
 {
+	cursor.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
 	//- Update current state
 	state_stack.back()->update(this, dt);
 }
@@ -190,6 +196,7 @@ void Game::render(sf::RenderWindow &window)
 {
 	window.clear();
 	state_stack.back()->render(this);
+	window.draw(cursor);
 	window.display();
 }
 

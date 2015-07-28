@@ -19,6 +19,8 @@ private:
 	sf::Clock clock;
 	std::vector<State*> state_stack;
 	sf::Image icon;
+	sf::Texture cursor_txr;
+	sf::Sprite cursor;
 
 	void init();
 	void create_files(int);
@@ -39,6 +41,7 @@ public:
 
 	sf::RenderWindow* get_window() { return &window; }
 	GameObject* get_gameobject() { return &gameobject; }
+	sf::Sprite* get_cursor() { return &cursor; }
 	std::vector<State*> get_state_stack() { return state_stack; }
 	int get_width() { return this->game_width; }
 	int get_height() { return this->game_height; }
