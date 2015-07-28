@@ -52,6 +52,7 @@ void GameState::init(Game* game)
 	score_txt.setFont(font);
 	score_txt.setColor(sf::Color::White);
 	score_txt.setString("Score: 0");
+	hud.init(font);
 
 	game->get_window()->setView(level.get_view());
 }
@@ -203,6 +204,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	mob.update(deltaTime);
     mob.move2(player.get_x(), player.get_y());
     player.update(deltaTime);
+    hud.update(deltaTime, player, level);
 }
 
 //- Player specific rotate
@@ -265,6 +267,7 @@ void GameState::render(Game* game)
 
 	//- UI stuff is rendered over everything else
 	game->get_window()->draw(score_txt);
+	hud.render(game->get_window());
 }
 
 

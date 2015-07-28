@@ -73,6 +73,8 @@
 		<Unit filename="src/pugiconfig.hpp" />
 		<Unit filename="src/pugixml.cpp" />
 		<Unit filename="src/pugixml.hpp" />
+		<Unit filename="src/screen/hud.cpp" />
+		<Unit filename="src/screen/hud.h" />
 		<Unit filename="src/soundmanager.h" />
 		<Unit filename="src/states/gamestate.cpp" />
 		<Unit filename="src/states/gamestate.h" />

@@ -12,6 +12,7 @@
 #include "../entities/entity.h"
 #include "../entities/mob.h"
 #include "../entities/bullet.h"
+#include "../screen/hud.h"
 
 class GameState : public State
 {
@@ -42,6 +43,7 @@ private:
 	sf::SoundBuffer shoot_buf; sf::Sound shoot_snd;
 
 	//- UI stuff
+	Hud hud;
 	sf::Font font;
 	sf::Text score_txt;
 
