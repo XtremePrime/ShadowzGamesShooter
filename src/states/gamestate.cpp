@@ -77,7 +77,7 @@ void GameState::handle_events(Game* game, sf::Event event)
 	}else if(event.type == sf::Event::MouseButtonPressed){
 		if(event.mouseButton.button == sf::Mouse::Left)
 		{
-    		bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()));
+    		bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
     		if(has_sfx)
     			shoot_snd.play();
 
@@ -198,6 +198,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Rotate mobs towards player loc.$
 	rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
 
+	// check_weapon_pickup(player);
+
 	//- Collision test!
 	// if(player.intersects(mob))
 	// 	std::cout << "Collision!\n";
@@ -210,6 +212,14 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     game->get_cursor()->setPosition(t(player.get_x(), level.get_view().getSize().x, game->get_cursor()->getPosition().x), t(player.get_y(), level.get_view().getSize().y, game->get_cursor()->getPosition().y));
     #undef t
 }
+
+// void GameState::check_weapon_pickup(Player& p)
+// {
+// 	if(player.get_weapon().get_name() == "strudel")
+// 	{
+// 		player.get_weapon().add_ammo(60);
+// 	}
+// }
 
 //- Player specific rotate
 void GameState::rotate(Player* p, Game* game, sf::Time deltaTime)

@@ -5,17 +5,17 @@
 #include "mob.h"
 #include "../gameobject.hpp"
 #include "../levels/tile.h"
+#include "../weapon.h"
 
 class Player : public Mob
 {
 private:
-
 	sf::Vector2f acceleration;
 	int score = 0;
+	Weapon weapon;
 
 	std::map<std::string, sf::Keyboard::Key> keys;
 	bool is_standard_movement;
-
 public:
     int hp=100;
     bool is_dead = false;
@@ -29,6 +29,7 @@ public:
 	bool can_move(Tile* tile);
 	void move2(int, int, sf::Time);
     bool was_hurt (Player p, Mob* mob);
+
 	int get_x(){return this->x;}
 	int get_y(){return this->y;}
 	void set_x(int xx){this->x = xx;}
@@ -44,7 +45,8 @@ public:
 	int get_score() { return this->score; }
 	void update_score(int score) { this->score += score; }
 	bool get_death() { return this->is_dead; }
-
+	Weapon& get_weapon() { return this->weapon; }
+	void create_weapon(std::string name, int ammo, int dmg) { this->weapon.init(name, ammo, dmg); }
 };
 
 #endif // PLAYER_H

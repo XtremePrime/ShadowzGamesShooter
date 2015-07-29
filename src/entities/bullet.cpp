@@ -1,12 +1,13 @@
 #include "bullet.h"
 
-Bullet::Bullet(int x, int y, float angle)
+Bullet::Bullet(int x, int y, float angle, int dmg = 1)
 {
 	this->x = x;
 	this->y = y;
 	this->w = 10;
 	this->h = 20;
 	this->speed = 600;
+	this->damage = dmg;
 
 	rect.setRotation(angle+90);
 	rect.setSize(sf::Vector2f(w, h));
