@@ -186,7 +186,10 @@ void GameState::update(Game* game,  sf::Time deltaTime)
        std::cout <<"Player hp "<<player.hp <<"\n";
 
 	}
-
+	if (player.is_dead==true){game->change_state(IntroState::instance());
+                                music.stop();
+                                game->get_window()->setView(game->get_window()->getDefaultView());
+	}
 
 
 	//- Player rotation based on mouse loc
