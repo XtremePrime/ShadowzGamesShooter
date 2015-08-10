@@ -4,16 +4,17 @@ Bullet::Bullet(int x, int y, float angle, int dmg = 1)
 {
 	this->x = x;
 	this->y = y;
-	this->w = 10;
-	this->h = 20;
+	this->w = 0.4;
+	this->h = 0.6;
 	this->speed = 600;
 	this->damage = dmg;
 
-	rect.setRotation(angle+90);
-	rect.setSize(sf::Vector2f(w, h));
-	rect.setPosition(sf::Vector2f(x, y));
-	rect.setOrigin(w/2, h/2);
-	rect.setFillColor(sf::Color::Yellow);
+	texture.loadFromFile("res/models/bullet.png");
+	sprite.setTexture(texture);
+	sprite.setRotation(angle+90);
+	sprite.setScale(sf::Vector2f(w, h));
+	sprite.setPosition(sf::Vector2f(x, y));
+	sprite.setOrigin(w/2, h/2);
 }
 
 void Bullet::init(int x, int y, int w, int h)
@@ -36,7 +37,7 @@ void Bullet::update(sf::Time deltaTime)
 		move(deltaTime);
 		if(traveldist >= 100)
 			remove();
-		this->bbox = rect.getGlobalBounds();	
+		this->bbox = sprite.getGlobalBounds();
 	}
 }
 
@@ -46,15 +47,15 @@ void Bullet::move(sf::Time dt)
 
 	#define RADIAN (3.14159265 / 180.)
 
-	vx -= speed * sin(rect.getRotation() * RADIAN);
-    vy += speed * cos(rect.getRotation() * RADIAN);
+	vx -= speed * sin(sprite.getRotation() * RADIAN);
+    vy += speed * cos(sprite.getRotation() * RADIAN);
 
     #undef RADIAN
 
     x += vx * dt.asSeconds();
 	y += vy * dt.asSeconds();
 
-	rect.setPosition(sf::Vector2f(x, y));
+	sprite.setPosition(sf::Vector2f(x, y));
 
 	traveldist++;
 }
@@ -63,6 +64,6 @@ void Bullet::render(sf::RenderWindow *win)
 {
 	if(!removed)
 	{
-		win->draw(rect);
-	}	
+		win->draw(sprite);
+	}
 }

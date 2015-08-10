@@ -11,7 +11,8 @@ protected:
     int damage = 1;
 	int speed = 200;
     int traveldist = 0;
-	sf::RectangleShape rect;
+    sf::Texture texture;
+	sf::Sprite sprite;
     const int SIZE = 16;
     int vx = 0, vy = 0;
     void move(sf::Time);

@@ -16,7 +16,7 @@ protected:
     sf::FloatRect bbox;
 public:
     bool removed = false;
-    int x, y, w, h;
+    float x, y, w, h;
     enum Direction{UP,DOWN,LEFT,RIGHT};
     Direction dir;
 
