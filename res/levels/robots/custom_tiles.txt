@@ -1,0 +1,1 @@
+tileroboti.png 100 0 0 255
