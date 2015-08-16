@@ -7,3 +7,5 @@ dirt-floor1.png 0 150 0 255
 dirt-floor2.png 100 150 0 255
 dirt-floor3.png 0 150 100 255
 dirt-floor4.png 50 150 50 255
+skull.png 255 255 0 255
+spawn_point.png 0 0 100 255
