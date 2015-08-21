@@ -29,7 +29,7 @@ void Mob::init(int x, int y, int w, int h)
 	this->w = w;
 	this->h = h;
 	this->health = 10;
-	texture.loadFromFile("res/models/Demon_basic.png");
+	texture.loadFromFile("res/models/demon_tank.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
 	sprite.rotate(-90);
