@@ -14,6 +14,7 @@ private:
 	sf::Text credits;
 	sf::Text version;
 	sf::RectangleShape selector;
+	sf::RectangleShape blackbox;
 	int selected_id = 0;
 	std::vector<sf::Text*> menu_options;
 	const int MAX_OPTIONS = 5;

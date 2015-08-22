@@ -20,7 +20,7 @@ void LevelGen::init(std::string path)
 * White and Black are both const colors allocated their certain filenames:
 * White: Floor tiles (walkable) [floor.png]
 * Black: Walls/Barrier (non-walkable) [wall.png]
-* 
+*
 * To declare customs, create a "custom_tiles.txt" file in the level folder
 * and fill it after the following schema:
 * <filename> <Red> <Green> <Blue> <Alpha>
@@ -37,6 +37,8 @@ void LevelGen::generate_map()
 	map.loadFromFile(this->path+"map.png");
 
 	size = map.getSize();
+
+	std::cout << "Loaded map size\n";
 
 	sf::Clock timer;
 	for(int i = 0; i < size.x*size.y; ++i)
@@ -66,6 +68,7 @@ void LevelGen::generate_map()
 
 void LevelGen::grab_custom_tiles()
 {
+	std::cout << "Grabbing c-tiles\n";
 	std::ifstream file;
 	file.open(this->path+"custom_tiles.txt");
 	if(!file.is_open()){std::cout << "File couldn't be open.\n";return;}
@@ -103,6 +106,10 @@ void LevelGen::grab_custom_tiles()
 			std::string x = input.substr(pos, input.length()-pos);
     		if(!x.empty())
        	 		tokens.push_back(x);
+
+       	 	for(int i = 0; i < tokens.size(); ++i)
+       	 		std::cout << tokens[i] << "|";
+       	 	std::cout << "\n";
 		};
 		split(line);
 

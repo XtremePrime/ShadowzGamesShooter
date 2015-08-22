@@ -17,7 +17,7 @@ void GameState::init(Game* game)
 	this->ip_address = game->get_gameobject()->ip_address;
 	this->port = game->get_gameobject()->port;
 	this->has_sfx = game->get_gameobject()->has_sfx;
-     sf::Clock cl;
+    sf::Clock cl;
 	//- Binding to the port to establish connection
 	if (socket.bind(port) != sf::Socket::Done)
 		std::cout << "Could not connect to: " << "localhost" << "!\n";
@@ -28,7 +28,7 @@ void GameState::init(Game* game)
    		// std::cout << "Sent bby\n";
 	// }
 
-	level.init("res/levels/demons/");
+	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
 	player.init(game->get_gameobject(), 400, 400, 32, 32);
 	// mobs.push_back(new Mob(150, 150, 16, 32));
 	mob.init(150, 150, 32, 32);
@@ -145,52 +145,38 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		}
 	}
 
-	//- Check collision of bullets w/ mobs & deletation
 	if(bullets.size() > 0)
 	{
 		for(Bullet* bullet : bullets)
 		{
+			//- Check if mob intersects bullets
 			if(mob.intersects(*bullet))
 			{
 				bullet->remove();
 				mob.damage(1);
 				std::cout << mob.get_hp() << "\n";
 			}
+			//- Check if bullets OOB
+			if(level.is_oob(bullet->get_x(), bullet->get_y()))
+				bullet->remove();
 		}
 		for(int i = 0; i < bullets.size(); ++i){
+			//- Bullet deletation
 			if(bullets[i]->removed)
 			{
-				// std::cout << "Deleting bullet: " << i << "\n";
 				bullets[i] = nullptr;
 				bullets.erase(bullets.begin()+i);
 			}
 		}
 	}
 
-
-	if(mob.x==player.x && mob.y==player.y){
-       //player.hp -= mob.dmg;
-
-
-        sf::Time elapsed1 = cl.getElapsedTime();
-        int time = (int) elapsed1.asSeconds();
-        if(time%2==1)
-        {
-            player.hp -= mob.dmg;
-            cl.restart();
-        }
-
-        if(player.hp<=0)
-            player.is_dead=true;
-        std::cout<<time<<" ";
-       std::cout <<"Player hp "<<player.hp <<"\n";
-
+	//- Change state on player death;
+	if (player.get_death())
+	{
+		music.stop();
+		game->get_window()->setView(game->get_window()->getDefaultView());
+		game->change_state(IntroState::instance());
 	}
-	if (player.is_dead==true){game->change_state(IntroState::instance());
-                                music.stop();
-                                game->get_window()->setView(game->get_window()->getDefaultView());
-	}
-
 
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
@@ -199,7 +185,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	#undef t
 
 	//- Rotate mobs towards player loc.$
-	rotate2(&mob, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
+	for(Mob* m : mobs)
+		rotate2(m, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
 
 	// check_weapon_pickup(player);
 
@@ -216,13 +203,17 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     #undef t
 }
 
-// void GameState::check_weapon_pickup(Player& p)
-// {
-// 	if(player.get_weapon().get_name() == "strudel")
-// 	{
-// 		player.get_weapon().add_ammo(60);
-// 	}
-// }
+/*void GameState::check_weapon_pickup(Player& p)
+{
+	std::stringstream ss;
+	ss << player.get_weapon().get_name() << "_pickup";
+	if(p)
+
+	if(player.get_weapon().get_name() == "strudel")
+	{
+		player.get_weapon().add_ammo(60);
+	}
+}*/
 
 //- Player specific rotate
 void GameState::rotate(Player* p, Game* game, sf::Time deltaTime)

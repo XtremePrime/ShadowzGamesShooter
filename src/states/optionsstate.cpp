@@ -26,7 +26,7 @@ void OptionsState::handle_events(Game* game, sf::Event event)
 		{
 			case sf::Keyboard::Escape:
 			{
-				game->change_state(IntroState::instance());
+				game->pop_state();
 			}break;
 			default:
 			break;

@@ -57,6 +57,11 @@ void IntroState::init(Game* game)
 	version.setColor(sf::Color::White);
 	version.setString(game->get_gameobject()->version);
 
+	//- Init blackbox
+	blackbox.setSize(sf::Vector2f(14, 14));
+	blackbox.setFillColor(sf::Color::Black);
+	blackbox.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
+
 	win_init();
 
 	//- Sound & Music init
@@ -117,7 +122,7 @@ void IntroState::handle_events(Game* game, sf::Event event)
 						 game->get_gameobject()->is_multiplayer = false;
 						 game->get_gameobject()->port = 7777;
 						 game->get_gameobject()->ip_address = "127.0.0.1";
-						 game->change_state(GameState::instance());
+						 game->change_state(StageState::instance());
 						 music.stop();
 					break;
 					case 1: //- Host
@@ -167,6 +172,7 @@ void IntroState::render(Game* game)
 	game->get_window()->draw(selector);
 	game->get_window()->draw(credits);
 	game->get_window()->draw(version);
+	game->get_window()->draw(blackbox);
 }
 
 void IntroState::cleanup()

@@ -63,6 +63,7 @@ void Game::setup_gameobject()
 
     //- Setup audio status
     gameobject.has_music = settings_node.child("AUDIO").attribute("music").as_bool();
+    gameobject.volume = settings_node.child("AUDIO").attribute("volume").as_float();
     gameobject.has_sfx = settings_node.child("AUDIO").attribute("sfx").as_bool();
 
     //- Finally, setup document
@@ -91,6 +92,7 @@ void Game::create_files(int state)
 
 		pugi::xml_node audionode = settings_node.append_child("AUDIO");
 		audionode.append_attribute("music") = true;
+		audionode.append_attribute("volume") = 1.0; 
 		audionode.append_attribute("sfx") = true;
 
 		pugi::xml_node controls = settings_node.append_child("CONTROLS");
