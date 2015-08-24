@@ -31,15 +31,15 @@ void StageState::init(Game* game)
 	select_box.setOutlineThickness(2.0f);
 
 	//- Init levels
-	levels[DEVTEST].init("devtest", 10, 10, mapsize, font, "Dev Test Level");
-	levels[DEMONS].init("demons", game->get_gameobject()->width-mapsize-10, game->get_gameobject()->height-mapsize-10, mapsize, font, "Hell Level");
+	levels[DEVTEST].init("devtest", 10, 10, mapsize, font, "DevTest Level");
+	levels[DEMONS].init("demons", game->get_gameobject()->width-mapsize-10, game->get_gameobject()->height-mapsize-10, mapsize, font, "Demons Level");
 
 	//- Set text positions
 	// levels[DEVTEST].text->setPosition(sf::Vector2f(10, 10+mapsize+15));
 	// levels[DEMONS].text.setPosition(sf::Vector2f(-999, -999));
 
 	//- Init texts
-	auto init_text = [this](sf::Text& t, sf::Font f, std::string title, sf::Vector2f vec) -> void
+	auto init_text = [this](sf::Text& t, sf::Font& f, std::string title, sf::Vector2f vec) -> void
 	{
 		t.setCharacterSize(15);
 		t.setFont(f);
@@ -48,7 +48,10 @@ void StageState::init(Game* game)
 		t.setPosition(vec);
 	};
 
-	init_text(level_names[DEVTEST], font, "DevTest Level", sf::Vector2f(400, 400));
+	init_text(level_names[DEVTEST], font, "DevTest Level", sf::Vector2f(10+30, levels[DEVTEST].y+mapsize+15));
+	init_text(level_names[DEMONS], font, "Demons Level", sf::Vector2f(levels[DEMONS].x+30,levels[DEMONS].y-15-10));
+
+	init_text(txt, font, "test", sf::Vector2f(300, 300));
 }
 
 void StageState::send_to_level(Game* game)
@@ -71,14 +74,14 @@ void StageState::send_to_level(Game* game)
 
 void StageState::move_selected(int v)
 {
-	std::cout << "[StageSelect]: Old level: " << level_select;
+	// std::cout << "[StageSelect]: Old level: " << level_select;
 
 	if(level_select == 0 && v == -1) return;
 	else if(level_select == TOTAL_LEVELS-1 && v == 1) return;
 
 	level_select += v;
 
-	std::cout << " / New level: " << level_select << "\n";
+	// std::cout << " / New level: " << level_select << "\n";
 }
 
 void StageState::handle_events(Game* game, sf::Event event)
@@ -125,7 +128,10 @@ void StageState::render(Game* game)
 	}
 
 	game->get_window()->draw(select_box);
-	game->get_window()->draw(level_names[DEVTEST]);
+
+	for(int i = 0; i < TOTAL_LEVELS; ++i)
+		game->get_window()->draw(level_names[i]);
+	// game->get_window()->draw(txt);
 }
 
 void StageState::cleanup()

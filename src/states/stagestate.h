@@ -12,6 +12,7 @@ class StageState : public State
 {
 private:
 	int mapsize = 250;
+	sf::Text txt;
 
 	struct StageMap{
 		std::string name;

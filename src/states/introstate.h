@@ -13,6 +13,13 @@ private:
 	sf::Font font;
 	sf::Text credits;
 	sf::Text version;
+
+	//- Notification stuff
+	sf::FloatRect notification_text_box;
+	sf::Text notification_text;
+	sf::Clock n_timer;
+	bool show_notification = false;
+
 	sf::RectangleShape selector;
 	sf::RectangleShape blackbox;
 	int selected_id = 0;
