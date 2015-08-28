@@ -1,3 +1,6 @@
+#ifndef SPAWNPOINT_H
+#define SPAWNPOINT_H
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -15,3 +18,5 @@ public:
 	void activate(){ this->active = true; }
 	void deactivate(){ this->active = false; }	
 };
+
+#endif // SPAWNPOINT_H

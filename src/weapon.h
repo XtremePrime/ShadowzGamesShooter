@@ -14,10 +14,18 @@ private:
 	sf::Texture txr;
 	sf::Sprite sprite;
 public:
+	enum WeaponEnum
+	{
+		PISTOL = 0,
+		SHOTGUN = 1
+	} weapon_list;
+
 	void init(std::string, int, int);
 
 	int get_dmg() { return this->damage; }
 	void add_ammo(int a) { this->ammo += a; }
+
+	Weapon& operator=(WeaponEnum);
 };
 
 #endif // WEAPON_H

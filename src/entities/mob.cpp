@@ -87,9 +87,8 @@ void Mob::handle_events(sf::Event *event)
 
 void Mob::update(sf::Time deltaTime)
 {
-	if(health <= 0){
+	if(health <= 0)
 		remove();
-	}
 	this->bbox = sprite.getGlobalBounds();
 }
 

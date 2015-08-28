@@ -15,6 +15,7 @@ private:
 public:
 	void init(std::string);
 
+	std::vector<SpawnPoint*> get_list() { return this->splist; }
 	SpawnPoint& get_sp(int idx){ return (*splist[idx]); }
 	SpawnPoint* get_sp(int, int);
 };

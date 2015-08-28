@@ -38,7 +38,7 @@ void IntroState::init(Game* game)
 	menu_options[0]->setString("START GAME (SINGLEPLAYER)");
 	menu_options[1]->setString("HOST");
 	menu_options[2]->setString("JOIN");
-	menu_options[3]->setString("OPTIONS (FULLSCREEN/WINDOWED)");
+	menu_options[3]->setString("OPTIONS");
 	menu_options[4]->setString("EXIT");
 
 	//- Init selector
@@ -57,12 +57,27 @@ void IntroState::init(Game* game)
 	version.setColor(sf::Color::White);
 	version.setString(game->get_gameobject()->version);
 
+	//- Init blackbox
+	blackbox.setSize(sf::Vector2f(14, 14));
+	blackbox.setFillColor(sf::Color::Black);
+	blackbox.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
+
 	win_init();
 
 	//- Sound & Music init
 	music.openFromFile("res/music/mainmenu.flac");
 	if(game->get_gameobject()->has_music)
 		music.play();
+
+	//- Init notification text
+	notification_text.setCharacterSize(25);
+	notification_text.setFont(font);
+	notification_text.setColor(sf::Color::Red);
+	notification_text.setString("Feature not yet implemented!");
+
+	notification_text_box = notification_text.getLocalBounds();
+	notification_text.setOrigin(notification_text_box.left + notification_text_box.width/2.0f, notification_text_box.top  + notification_text_box.height/2.0f);
+	notification_text.setPosition(sf::Vector2f(GAME_WIDTH/2.0f,GAME_HEIGHT/2.0f));
 }
 
 void IntroState::win_init()
@@ -117,17 +132,23 @@ void IntroState::handle_events(Game* game, sf::Event event)
 						 game->get_gameobject()->is_multiplayer = false;
 						 game->get_gameobject()->port = 7777;
 						 game->get_gameobject()->ip_address = "127.0.0.1";
-						 game->change_state(GameState::instance());
+						 game->change_state(StageState::instance());
 						 music.stop();
 					break;
 					case 1: //- Host
+						show_notification = true;
+						n_timer.restart();
 						// game->get_gameobject()->is_multiplayer = true;
 						// game->change_state(GameState::instance());
 					break;
 					case 2: //- Join
+						show_notification = true;
+						n_timer.restart();
 					break;
 					case 3: //- Options
-						game->push_state(OptionsState::instance());
+						show_notification = true;
+						n_timer.restart();
+						// game->push_state(OptionsState::instance());
 
 						// if(!game->get_fullscreen())
 						// {
@@ -157,7 +178,12 @@ void IntroState::handle_events(Game* game, sf::Event event)
 
 void IntroState::update(Game* game,  sf::Time deltaTime)
 {
-
+	// std::cout << n_timer.getElapsedTime().asMilliseconds() << "," << show_notification << "\n";
+	if(n_timer.getElapsedTime().asMilliseconds() >= 2500 && show_notification)
+	{
+		show_notification = false;
+		n_timer.restart();
+	}
 }
 
 void IntroState::render(Game* game)
@@ -167,6 +193,10 @@ void IntroState::render(Game* game)
 	game->get_window()->draw(selector);
 	game->get_window()->draw(credits);
 	game->get_window()->draw(version);
+	game->get_window()->draw(blackbox);
+
+	if(show_notification)
+		game->get_window()->draw(notification_text);
 }
 
 void IntroState::cleanup()

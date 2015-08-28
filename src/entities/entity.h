@@ -10,7 +10,6 @@ class Entity
 protected:
     std::string name;
 
-
     sf::Texture texture;
     sf::Sprite sprite;
     sf::FloatRect bbox;

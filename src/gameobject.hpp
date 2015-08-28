@@ -27,7 +27,8 @@ public:
 	bool is_standard_movement = true;
 	bool has_music = true;
 	bool has_sfx = true;
-	std::string version = "pre-v0.3";
+	float volume = 1.0;
+	std::string version = "pre-v0.3_1 DEMO";
 	std::string username = "In-Dev Player";
 };
 
