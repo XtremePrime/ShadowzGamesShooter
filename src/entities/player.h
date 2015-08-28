@@ -47,6 +47,7 @@ public:
 	bool get_death() { return this->is_dead; }
 	Weapon& get_weapon() { return this->weapon; }
 	void create_weapon(std::string name, int ammo, int dmg) { this->weapon.init(name, ammo, dmg); }
+	void set_weapon(int id);
 };
 
 #endif // PLAYER_H

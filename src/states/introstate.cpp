@@ -178,7 +178,7 @@ void IntroState::handle_events(Game* game, sf::Event event)
 
 void IntroState::update(Game* game,  sf::Time deltaTime)
 {
-	std::cout << n_timer.getElapsedTime().asMilliseconds() << "," << show_notification << "\n";
+	// std::cout << n_timer.getElapsedTime().asMilliseconds() << "," << show_notification << "\n";
 	if(n_timer.getElapsedTime().asMilliseconds() >= 2500 && show_notification)
 	{
 		show_notification = false;

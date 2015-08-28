@@ -30,8 +30,8 @@ void GameState::init(Game* game)
 
 	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
 	player.init(game->get_gameobject(), 400, 400, 32, 32);
-	// mobs.push_back(new Mob(150, 150, 16, 32));
-	mob.init(150, 150, 32, 32);
+	player.set_weapon(Weapon::WeaponEnum::PISTOL);
+	mobs.push_back(new Mob(150, 150, 16, 32));
 
 	// mob.init(150, 150, 16, 32);
 
@@ -53,6 +53,10 @@ void GameState::init(Game* game)
 	score_txt.setColor(sf::Color::White);
 	score_txt.setString("Score: 0");
 	hud.init(font, game->get_gameobject()->width, game->get_gameobject()->height);
+
+	//- Enemies setup
+	wave = 0;
+	enemies_left = 0/*wave*5+wave*/;
 
 	game->get_window()->setView(level.get_view());
 }
@@ -134,6 +138,11 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Check deletation of mobs
 	if(mobs.size() > 0)
 	{
+		for(Mob* mob: mobs){
+			std::cout << mob->get_hp() << "\n";
+			mob->move2(player.get_x(), player.get_y());
+		}
+
 		for(int i = 0; i < mobs.size(); ++i){
 			if(mobs[i]->removed)
 			{
@@ -149,13 +158,15 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	{
 		for(Bullet* bullet : bullets)
 		{
-			//- Check if mob intersects bullets
-			if(mob.intersects(*bullet))
-			{
-				bullet->remove();
-				mob.damage(1);
-				std::cout << mob.get_hp() << "\n";
-			}
+			for(Mob* mob : mobs)
+            {
+                if(mob->intersects(*bullet))
+                {
+                    bullet->remove();
+                    mob->damage(bullet->get_dmg());
+                    // std::cout << mob->get_hp() << "\n";
+                }
+            }
 			//- Check if bullets OOB
 			if(level.is_oob(bullet->get_x(), bullet->get_y()))
 				bullet->remove();
@@ -193,14 +204,24 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Collision test!
 	// if(player.intersects(mob))
 	// 	std::cout << "Collision!\n";
-	mob.update(deltaTime);
-    mob.move2(player.get_x(), player.get_y());
     player.update(deltaTime);
     hud.update(deltaTime, player, level);
+
+    //- Check wave state & spawning
+    if(enemies_left <= 0)
+    {
+    	++wave;
+    	spawn_enemies(wave*5+wave, this->splist);
+    }
 
 	#define t(xr,yr,zr) (xr+zr)-(yr/2)
     game->get_cursor()->setPosition(t(player.get_x(), level.get_view().getSize().x, game->get_cursor()->getPosition().x), t(player.get_y(), level.get_view().getSize().y, game->get_cursor()->getPosition().y));
     #undef t
+}
+
+void GameState::spawn_enemies(int amount, SpawnPointList& spl)
+{
+
 }
 
 /*void GameState::check_weapon_pickup(Player& p)
@@ -270,8 +291,6 @@ void GameState::render(Game* game)
 	for(Bullet* bullet : bullets){
 		bullet->render(game->get_window());
 	}
-
-    mob.render(game->get_window());
 
 	//- UI stuff is rendered over everything else
 	game->get_window()->draw(score_txt);

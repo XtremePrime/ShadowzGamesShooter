@@ -25,7 +25,7 @@ public:
     void render(sf::RenderWindow *win);
 
     // int get_hp() { return this->hp; }
-    // int get_dmg() { return this->dmg; }
+    int get_dmg() { return this->damage; }
     // bool get_death() { return this->is_dead; }
 };
 #endif

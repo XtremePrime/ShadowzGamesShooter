@@ -12,7 +12,10 @@
 #include "../entities/entity.h"
 #include "../entities/mob.h"
 #include "../entities/bullet.h"
+#include "../weapon.h"
 #include "../screen/hud.h"
+#include "../levels/spawnpointlist.h"
+#include "../levels/spawnpoint.h"
 
 class GameState : public State
 {
@@ -24,9 +27,6 @@ private:
 
 	bool is_paused = false;
 	bool has_sfx;
-
-
-	Mob mob;
 
 	//- Timing stuff
 	sf::Clock item_cl;
@@ -47,9 +47,14 @@ private:
 	sf::Font font;
 	sf::Text score_txt;
 
+	//- Enemies stuff
+	SpawnPointList splist;
+	int wave;
+	int enemies_left;
+
 	void rotate(Player*, Game*, sf::Time);
 	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);
-
+	void spawn_enemies(int, SpawnPointList&);
 protected:
 	static GameState* _instance;
 	GameState(){}

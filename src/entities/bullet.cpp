@@ -24,10 +24,7 @@ void Bullet::init(int x, int y, int w, int h)
 
 void Bullet::handle_events(sf::Event *event)
 {
-	if(!removed)
-	{
-
-	}
+	if(!removed){}
 }
 
 void Bullet::update(sf::Time deltaTime)
