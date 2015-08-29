@@ -1,11 +1,9 @@
 #include "gamestate.h"
 #include "introstate.h"
 
-
 #include <sstream>
 
 GameState* GameState::_instance;
-sf::Clock cl;
 GameState* GameState::instance(){
 	if(_instance == NULL)
 		_instance = new GameState();
@@ -17,7 +15,6 @@ void GameState::init(Game* game)
 	this->ip_address = game->get_gameobject()->ip_address;
 	this->port = game->get_gameobject()->port;
 	this->has_sfx = game->get_gameobject()->has_sfx;
-     sf::Clock cl;
 	//- Binding to the port to establish connection
 	if (socket.bind(port) != sf::Socket::Done)
 		std::cout << "Could not connect to: " << "localhost" << "!\n";
@@ -28,16 +25,20 @@ void GameState::init(Game* game)
    		// std::cout << "Sent bby\n";
 	// }
 
+	//- Init Level
 	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
+	
+	//- Init player
 	player.init(game->get_gameobject(), 400, 400, 32, 32);
 	player.set_weapon(Weapon::WeaponEnum::PISTOL);
-	mobs.push_back(new Mob(150, 150, 16, 32));
-
-	// mob.init(150, 150, 16, 32);
+	// std::cout << player.get_weapon().get_name() << ",";
+	// std::cout << player.get_weapon().get_ammo() << ",";
+	// std::cout << player.get_weapon().get_delay() << ",";
+	// std::cout << player.get_weapon().get_dmg() << "\n";
 
 
 	//- Music & Sound init
-	music.openFromFile("res/music/devtest.flac");
+	music.openFromFile("res/music/"+game->get_gameobject()->level_name+"/theme.flac");
 	music.setLoop(true);
 	if(game->get_gameobject()->has_music)
 		music.play();
@@ -57,8 +58,20 @@ void GameState::init(Game* game)
 	//- Enemies setup
 	wave = 0;
 	enemies_left = 0/*wave*5+wave*/;
+	for(int i = 0; i < 999; ++i)
+		mobs.push_back(new Mob(150, 150, 32, 32));
 
+
+	//- Setup game view
 	game->get_window()->setView(level.get_view());
+}
+
+void GameState::player_shoot()
+{
+	bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
+	
+	if(has_sfx)
+		shoot_snd.play();
 }
 
 void GameState::handle_events(Game* game, sf::Event event)
@@ -78,23 +91,38 @@ void GameState::handle_events(Game* game, sf::Event event)
 			default:
 			break;
 		}
-	}else if(event.type == sf::Event::MouseButtonPressed){
+	}
+	else if(event.type == sf::Event::MouseButtonPressed)
+	{
 		if(event.mouseButton.button == sf::Mouse::Left)
 		{
-    		bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
-    		if(has_sfx)
-    			shoot_snd.play();
+			clicked = true;
 
-    		player.update_score(100);
-    		std::stringstream ss;
-    		ss << "Score: " << player.get_score();
-    		score_txt.setString(ss.str());
+    		// player.update_score(100);
+    		// std::stringstream ss;
+    		// ss << "Score: " << player.get_score();
+    		// score_txt.setString(ss.str());
 		}
-	}else if(event.type == sf::Event::LostFocus){
+	}
+	else if(event.type == sf::Event::MouseButtonReleased)
+	{
+		if(event.mouseButton.button == sf::Mouse::Left)
+		{
+			clicked = false;
+			
+			if(player.get_weapon().get_timer().getElapsedTime().asSeconds() >= player.get_weapon().get_delay())
+    			player.get_weapon().get_timer().restart();
+		}
+	}
+	else if(event.type == sf::Event::LostFocus)
+	{
 		pause();
-	}else if(event.type == sf::Event::GainedFocus){
+	}
+	else if(event.type == sf::Event::GainedFocus)
+	{
 		resume();
 	}
+
 	//- handle EVERYTHING
 	level.handle_events(&event);
 	if(!is_paused)
@@ -105,6 +133,7 @@ void GameState::handle_events(Game* game, sf::Event event)
 
 void GameState::update(Game* game,  sf::Time deltaTime)
 {
+	std::cout << clicked << " | " << player.get_weapon().get_timer().getElapsedTime().asSeconds() << " | " << player.get_weapon().get_delay() << "\n";
 
 	//- update EVERYTHING
 	if(is_paused){return;}
@@ -135,11 +164,18 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 
 	#undef t
 
+	//- Checking if the player is shooting
+	if(clicked && player.get_weapon().get_timer().getElapsedTime().asSeconds() >= player.get_weapon().get_delay())
+	{
+		player.get_weapon().get_timer().restart();
+		player_shoot();
+	}
+
 	//- Check deletation of mobs
 	if(mobs.size() > 0)
 	{
 		for(Mob* mob: mobs){
-			std::cout << mob->get_hp() << "\n";
+			// std::cout << mob->get_hp() << "\n";
 			mob->move2(player.get_x(), player.get_y());
 		}
 
@@ -164,9 +200,12 @@ void GameState::update(Game* game,  sf::Time deltaTime)
                 {
                     bullet->remove();
                     mob->damage(bullet->get_dmg());
-                    // std::cout << mob->get_hp() << "\n";
+                	break;
                 }
             }
+            if(bullet->removed)
+            	break;
+
 			//- Check if bullets OOB
 			if(level.is_oob(bullet->get_x(), bullet->get_y()))
 				bullet->remove();

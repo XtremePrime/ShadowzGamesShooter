@@ -62,6 +62,16 @@ void IntroState::init(Game* game)
 	blackbox.setFillColor(sf::Color::Black);
 	blackbox.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
 
+	//- Init titlescreen
+	ts_txr.loadFromFile("res/screen/title_screen.png");
+	title_screen.setTexture(ts_txr);
+	title_screen.scale(1.3f, 1.1f);
+	{
+		sf::FloatRect ts_box = title_screen.getLocalBounds();
+		title_screen.setOrigin(ts_box.left+ts_box.width/2.0f,ts_box.top+ts_box.height/2.0f);
+		title_screen.setPosition(GAME_WIDTH/2.0f, 50+(285*1.1f)/2);
+	}
+
 	win_init();
 
 	//- Sound & Music init
@@ -188,13 +198,14 @@ void IntroState::update(Game* game,  sf::Time deltaTime)
 
 void IntroState::render(Game* game)
 {
+	game->get_window()->draw(title_screen);
 	for(int i = 0; i < menu_options.size(); ++i)
 		game->get_window()->draw(*menu_options[i]);
 	game->get_window()->draw(selector);
 	game->get_window()->draw(credits);
 	game->get_window()->draw(version);
 	game->get_window()->draw(blackbox);
-
+	
 	if(show_notification)
 		game->get_window()->draw(notification_text);
 }

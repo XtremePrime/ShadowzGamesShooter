@@ -46,7 +46,7 @@ public:
 	void update_score(int score) { this->score += score; }
 	bool get_death() { return this->is_dead; }
 	Weapon& get_weapon() { return this->weapon; }
-	void create_weapon(std::string name, int ammo, int dmg) { this->weapon.init(name, ammo, dmg); }
+	void create_weapon(std::string name, int ammo, float delay, int dmg) { this->weapon.init(name, ammo, delay, dmg); }
 	void set_weapon(int id);
 };
 

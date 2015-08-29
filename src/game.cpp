@@ -19,8 +19,11 @@ void Game::init()
 	create_files(has_files());
 	setup_gameobject();
 
+	//- Init context settings
+	settings.antialiasingLevel = 8;
+
 	//- Init Win Window
-	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game "+gameobject.version, sf::Style::Titlebar | sf::Style::Close);
+	this->window.create(sf::VideoMode(game_width, game_height), "Deadly Stages "+gameobject.version, sf::Style::Titlebar | sf::Style::Close, settings);
 	this->window.setVerticalSyncEnabled(true);
 	this->window.setKeyRepeatEnabled(false);
 	this->window.setMouseCursorVisible(false);

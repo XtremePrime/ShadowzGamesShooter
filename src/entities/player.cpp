@@ -186,14 +186,13 @@ void Player::update(sf::Time deltaTime)
 
 void Player::set_weapon(int id)
 {
-
 	switch(id)
 	{
 		case Weapon::WeaponEnum::PISTOL:{
-			this->weapon.init("Pistol", 999, 1);
+			this->weapon.init("Pistol", 999, 1.0f, 1);
 		}break;
 		case Weapon::WeaponEnum::SHOTGUN:{
-			this->weapon.init("Shotgun", 999, 5);
+			this->weapon.init("Shotgun", 999, 0.5f, 5);
 		}break;
 		default:{
 			std::cerr << "[Player]: Error setting weapon!\n";

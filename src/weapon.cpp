@@ -1,22 +1,9 @@
 #include "weapon.h"
 
-void Weapon::init(std::string name, int ammo, int damage)
+void Weapon::init(std::string name, int ammo, float d = 0.1f, int damage = 1)
 {
 	this->name = name;
 	this->ammo = ammo;
+	this->delay = d;
 	this->damage = damage;
-}
-
-Weapon& Weapon::operator=(WeaponEnum we)
-{
-	Weapon w;
-
-	switch(we)
-	{
-		case 0:
-		break;
-		default:
-		break;
-	}
-	return w;
 }

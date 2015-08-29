@@ -25,13 +25,14 @@ private:
 	std::vector<Mob*> mobs;
 	std::vector<Bullet*> bullets;
 
+	//- States
 	bool is_paused = false;
 	bool has_sfx;
+	bool clicked = false;
 
 	//- Timing stuff
 	sf::Clock item_cl;
 	sf::Clock mobs_cl;
-
 
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
@@ -55,6 +56,7 @@ private:
 	void rotate(Player*, Game*, sf::Time);
 	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);
 	void spawn_enemies(int, SpawnPointList&);
+	void player_shoot();
 protected:
 	static GameState* _instance;
 	GameState(){}

@@ -22,6 +22,8 @@ private:
 
 	sf::RectangleShape selector;
 	sf::RectangleShape blackbox;
+	sf::Texture ts_txr;
+	sf::Sprite title_screen;
 	int selected_id = 0;
 	std::vector<sf::Text*> menu_options;
 	const int MAX_OPTIONS = 5;
