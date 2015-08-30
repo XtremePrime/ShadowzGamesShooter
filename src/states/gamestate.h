@@ -12,10 +12,12 @@
 #include "../entities/entity.h"
 #include "../entities/mob.h"
 #include "../entities/bullet.h"
+#include "../entities/basicenemy.h"
 #include "../weapon.h"
 #include "../screen/hud.h"
 #include "../levels/spawnpointlist.h"
 #include "../levels/spawnpoint.h"
+#include "gameoverstate.h"
 
 class GameState : public State
 {
@@ -46,7 +48,6 @@ private:
 	//- UI stuff
 	Hud hud;
 	sf::Font font;
-	sf::Text score_txt;
 
 	//- Enemies stuff
 	SpawnPointList splist;

@@ -24,6 +24,7 @@ void Player::init(int x, int y, int w, int h)
 	this->ly = y;
 	vx = vy = 0;
 	this->speed = 250;
+	this->health = 14;
 
 	//- Init sprite
 	texture.loadFromFile("res/models/player_1.png");
@@ -59,13 +60,6 @@ void Player::handle_events(sf::Event *event)
 void Player::render(sf::RenderWindow *win)
 {
 	win->draw(sprite);
-}
-
-bool Player::can_move(Tile* tile)
-{
-	if(!tile->can_pass())
-		return false;
-	return true;
 }
 
 void Player::move(sf::Time dt)
@@ -146,10 +140,21 @@ void Player::move(sf::Time dt)
 	// sprite.setPosition(sf::Vector2f(x, y));
 }*/
 
-void Player::move2(int xa, int ya, sf::Time dt)
+void Player::move2(int xa, int ya, sf::Time dt, int state)
 {
-	this->x += (xa) * dt.asSeconds();
-	this->y += (ya) * dt.asSeconds();
+	switch(state)
+	{
+		case 0:
+			this->x += (xa) * dt.asSeconds();
+			this->y += (ya) * dt.asSeconds();
+		break;
+		case 1:
+			this->x += (xa) * dt.asSeconds();
+		break;
+		case 2:
+			this->y += (ya) * dt.asSeconds();
+		break;
+	}
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 
@@ -189,10 +194,16 @@ void Player::set_weapon(int id)
 	switch(id)
 	{
 		case Weapon::WeaponEnum::PISTOL:{
-			this->weapon.init("Pistol", 999, 1.0f, 1);
+			this->weapon.init("Pistol", 999, 0.01f, 1);
+			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		case Weapon::WeaponEnum::SHOTGUN:{
-			this->weapon.init("Shotgun", 999, 0.5f, 5);
+			this->weapon.init("Shotgun", 999, 1.3f, 1);
+			this->weapon.set_id(Weapon::WeaponEnum::SHOTGUN);
+		}break;
+		case Weapon::WeaponEnum::M4A1:{
+			this->weapon.init("Machine gun", 999, 0.15f, 1);
+			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		default:{
 			std::cerr << "[Player]: Error setting weapon!\n";

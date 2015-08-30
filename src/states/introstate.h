@@ -29,7 +29,7 @@ private:
 	const int MAX_OPTIONS = 5;
 	sf::VideoMode desktop;
 
-	int GAME_WIDTH = 860, GAME_HEIGHT = 640, MENU_OFFSET_Y = 90; 
+	int GAME_WIDTH = 860, GAME_HEIGHT = 640, MENU_OFFSET_Y = 90, MENU_OFFSET_X = 50; 
 
 	//- Audio stuff
 	sf::Music music;

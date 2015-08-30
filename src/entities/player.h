@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "mob.h"
 #include "../gameobject.hpp"
-#include "../levels/tile.h"
 #include "../weapon.h"
 
 class Player : public Mob
@@ -17,7 +16,6 @@ private:
 	std::map<std::string, sf::Keyboard::Key> keys;
 	bool is_standard_movement;
 public:
-    int hp=100;
     bool is_dead = false;
     int x, y, vx, vy, lx, ly;
 	void init(GameObject* gameobj, int, int, int, int);
@@ -26,8 +24,8 @@ public:
 	void render(sf::RenderWindow*);
 	void update(sf::Time);
 	void move(sf::Time);
-	bool can_move(Tile* tile);
-	void move2(int, int, sf::Time);
+	
+	void move2(int, int, sf::Time, int);
     bool was_hurt (Player p, Mob* mob);
 
 	int get_x(){return this->x;}
@@ -46,7 +44,7 @@ public:
 	void update_score(int score) { this->score += score; }
 	bool get_death() { return this->is_dead; }
 	Weapon& get_weapon() { return this->weapon; }
-	void create_weapon(std::string name, int ammo, float delay, int dmg) { this->weapon.init(name, ammo, delay, dmg); }
+	// void create_weapon(std::string name, int ammo, float delay, int dmg) { this->weapon.init(name, ammo, delay, dmg); }
 	void set_weapon(int id);
 };
 

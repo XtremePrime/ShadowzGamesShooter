@@ -8,6 +8,7 @@
 class Weapon
 {
 private:
+	int id;
 	std::string name;
 	int damage;
 	int ammo;
@@ -26,11 +27,14 @@ public:
 	void add_ammo(int a) { this->ammo += a; }
 	float get_delay() { return this->delay; }
 	sf::Clock& get_timer() { return this->fire_timer; }
+	void set_id(int id) { this->id=id; }
+	int get_id() { return this->id; }
 
 	enum WeaponEnum
 	{
 		PISTOL = 0,
-		SHOTGUN = 1
+		SHOTGUN = 1,
+		M4A1 = 2
 	} weapon_list;
 };
 

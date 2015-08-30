@@ -4,17 +4,17 @@
 #include "../levels/level.h"
 #include "../entities/player.h"
 #include <SFML/Graphics.hpp>
+#include <sstream>
 
 class Hud
 {
 private:
-	sf::Texture txr;
-	sf::Sprite sprite;
 	sf::Font font;
 
-	const float SCALE = 2.f;
-	const int WIDTH = 512;
-	const int HEIGHT = 84;
+	//- Health bar
+	sf::Texture hpbar_txr; sf::Sprite hpbar;
+
+	sf::Text score_txt;
 
 	int screen_width, screen_height;
 public:

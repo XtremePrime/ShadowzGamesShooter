@@ -27,14 +27,10 @@ void GameState::init(Game* game)
 
 	//- Init Level
 	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
-	
+
 	//- Init player
 	player.init(game->get_gameobject(), 400, 400, 32, 32);
 	player.set_weapon(Weapon::WeaponEnum::PISTOL);
-	// std::cout << player.get_weapon().get_name() << ",";
-	// std::cout << player.get_weapon().get_ammo() << ",";
-	// std::cout << player.get_weapon().get_delay() << ",";
-	// std::cout << player.get_weapon().get_dmg() << "\n";
 
 
 	//- Music & Sound init
@@ -48,18 +44,13 @@ void GameState::init(Game* game)
 
 	//- UI init
 	font.loadFromFile("res/fonts/PressStart2P.ttf");
-	score_txt.setPosition(200, 200);
-	score_txt.setCharacterSize(15);
-	score_txt.setFont(font);
-	score_txt.setColor(sf::Color::White);
-	score_txt.setString("Score: 0");
 	hud.init(font, game->get_gameobject()->width, game->get_gameobject()->height);
 
 	//- Enemies setup
 	wave = 0;
 	enemies_left = 0/*wave*5+wave*/;
-	for(int i = 0; i < 999; ++i)
-		mobs.push_back(new Mob(150, 150, 32, 32));
+	// for(int i = 0; i < 999; ++i)
+		mobs.push_back(new BasicEnemy(150, 150, 32, 32, game->get_gameobject()->level_name));
 
 
 	//- Setup game view
@@ -68,10 +59,43 @@ void GameState::init(Game* game)
 
 void GameState::player_shoot()
 {
-	bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
-	
-	if(has_sfx)
-		shoot_snd.play();
+	#define ps(times) if(has_sfx){for(int i = 0; i < times; ++i){shoot_snd.play();}}
+
+	switch(player.get_weapon().get_id())
+	{
+		case Weapon::WeaponEnum::PISTOL:
+		{
+			//- One straight forward bullet, -1 from ammo, 1 sfx
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
+			player.get_weapon().add_ammo(-1);
+			ps(1);
+		}
+		break;
+		case Weapon::WeaponEnum::SHOTGUN:
+		{
+			//- 3 spread bullets, -3 from ammo, 3 sfxs
+			#define spread_angle 30
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()+spread_angle, player.get_weapon().get_dmg()));
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()-spread_angle, player.get_weapon().get_dmg()));
+			player.get_weapon().add_ammo(-3);
+			ps(1);
+			#undef spread_angle
+		}
+		case Weapon::WeaponEnum::M4A1:
+		{
+			//- One straight forward bullet, -1 from ammo, 1 sfx
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
+			player.get_weapon().add_ammo(-1);
+			ps(1);
+		}
+		break;
+		default:
+			std::cout << "[GameState]: Error shooting weapon! Weird ID...\n";
+		break;
+	}
+
+	#undef ps
 }
 
 void GameState::handle_events(Game* game, sf::Event event)
@@ -80,13 +104,13 @@ void GameState::handle_events(Game* game, sf::Event event)
 	{
 		switch(event.key.code)
 		{
-			case sf::Keyboard::Escape:
+			case sf::Keyboard::R:
 			{
 				//@TODO: Open menu
-				// game->change_state(IntroState::instance());
-				// game->get_state_stack().back()->init();
+				game->get_window()->setView(game->get_window()->getDefaultView());
+				game->change_state(GameOverState::instance());
 
-				game->quit();
+				// game->quit();
 			}break;
 			default:
 			break;
@@ -99,9 +123,6 @@ void GameState::handle_events(Game* game, sf::Event event)
 			clicked = true;
 
     		// player.update_score(100);
-    		// std::stringstream ss;
-    		// ss << "Score: " << player.get_score();
-    		// score_txt.setString(ss.str());
 		}
 	}
 	else if(event.type == sf::Event::MouseButtonReleased)
@@ -109,7 +130,7 @@ void GameState::handle_events(Game* game, sf::Event event)
 		if(event.mouseButton.button == sf::Mouse::Left)
 		{
 			clicked = false;
-			
+
 			if(player.get_weapon().get_timer().getElapsedTime().asSeconds() >= player.get_weapon().get_delay())
     			player.get_weapon().get_timer().restart();
 		}
@@ -133,8 +154,6 @@ void GameState::handle_events(Game* game, sf::Event event)
 
 void GameState::update(Game* game,  sf::Time deltaTime)
 {
-	std::cout << clicked << " | " << player.get_weapon().get_timer().getElapsedTime().asSeconds() << " | " << player.get_weapon().get_delay() << "\n";
-
 	//- update EVERYTHING
 	if(is_paused){return;}
 	level.update(deltaTime);
@@ -147,21 +166,19 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	}
 
 	//- Update player movement
-	float f = deltaTime.asSeconds();
-	#define t(xx, yy) xx+(yy*f)
-	// std::cout << t(player.get_x(),player.get_vx()) << "!!" << t(player.get_y(),player.get_vy()) << "\n";
+	#define t(xx, yy) xx+(yy*(float)(deltaTime.asSeconds()))
 	if(!level.is_oob(player.get_x(), player.get_y())){
+		//- Player tile collision
 		if( player.can_move( level.get_tile( t(player.get_y(),player.get_vy()),t(player.get_x(),player.get_vx()) ) ) ){
 			player.set_lx(player.get_x());
 			player.set_ly(player.get_y());
-			player.move2(player.get_vx(), player.get_vy(), deltaTime);
+			player.move2(player.get_vx(), player.get_vy(), deltaTime, 0);
 		}
-	}else{
+	}else{ //- Player OOB handle
 		player.set_x(player.get_lx());
 		player.set_y(player.get_ly());
 		std::cout << "OOB!\n";
 	}
-
 	#undef t
 
 	//- Checking if the player is shooting
@@ -174,9 +191,46 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Check deletation of mobs
 	if(mobs.size() > 0)
 	{
-		for(Mob* mob: mobs){
-			// std::cout << mob->get_hp() << "\n";
-			mob->move2(player.get_x(), player.get_y());
+		for(Mob* mob: mobs)
+		{
+			//- MOB X TILE COLLISION TEST. REFACTOR ASAP
+			//- COMMENT ASAP
+			#define t(xx, yy) xx+(yy*(float)(deltaTime.asSeconds()))
+			#define BOTH 0
+			#define ONLY_X 1
+			#define ONLY_Y 2
+			bool state = false;
+			if(mob->can_move( level.get_tile( mob->get_y()+(mob->get_vy()*(float)(deltaTime.asSeconds())), mob->get_x())))
+			{
+				std::cout << "X2\n";
+				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_Y);
+				state = true;
+			}
+			else if(mob->can_move( level.get_tile( mob->get_y()-(mob->get_vy()*(float)(deltaTime.asSeconds())), mob->get_x())))
+			{
+				std::cout << "X2-2\n";
+				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_X);
+				state = true;
+			}
+			if(mob->can_move( level.get_tile( mob->get_y(), mob->get_x()+(mob->get_vx()*(float)(deltaTime.asSeconds())))))
+			{
+				std::cout << "X1\n";
+				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_X);
+				state = true;
+			}
+			else if(mob->can_move( level.get_tile( mob->get_y(), mob->get_x()-(mob->get_vx()*(float)(deltaTime.asSeconds())))))
+			{
+				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_Y);
+				state = true;
+			}
+			if(!state){
+				std::cout << "X4\n";
+				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, BOTH);
+			}
+			#undef BOTH
+			#undef ONLY_X
+			#undef ONLY_Y
+			#undef t
 		}
 
 		for(int i = 0; i < mobs.size(); ++i){
@@ -192,6 +246,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 
 	if(bullets.size() > 0)
 	{
+		//- Check if bullet intersects mob
 		for(Bullet* bullet : bullets)
 		{
 			for(Mob* mob : mobs)
@@ -209,6 +264,12 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			//- Check if bullets OOB
 			if(level.is_oob(bullet->get_x(), bullet->get_y()))
 				bullet->remove();
+
+			//- Bullet x Tile collision
+			#define t(xx, yy) xx+(yy*(float)(deltaTime.asSeconds()))
+			if(!bullet->can_move( level.get_tile(bullet->get_y(), bullet->get_x())))
+				bullet->remove();
+			#undef t
 		}
 		for(int i = 0; i < bullets.size(); ++i){
 			//- Bullet deletation
@@ -230,9 +291,6 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 
 	//- Player rotation based on mouse loc
 	rotate(&player, game, deltaTime);
-	#define t(xr,yr) 5+xr-(yr/2)
-	score_txt.setPosition(t(player.get_x(), level.get_view().getSize().x), t(player.get_y(), level.get_view().getSize().y));
-	#undef t
 
 	//- Rotate mobs towards player loc.$
 	for(Mob* m : mobs)
@@ -254,7 +312,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     }
 
 	#define t(xr,yr,zr) (xr+zr)-(yr/2)
-    game->get_cursor()->setPosition(t(player.get_x(), level.get_view().getSize().x, game->get_cursor()->getPosition().x), t(player.get_y(), level.get_view().getSize().y, game->get_cursor()->getPosition().y));
+    // game->get_cursor()->setPosition(t(player.get_x(), level.get_view().getSize().x, game->get_cursor()->getPosition().x), t(player.get_y(), level.get_view().getSize().y, game->get_cursor()->getPosition().y));
     #undef t
 }
 
@@ -332,7 +390,6 @@ void GameState::render(Game* game)
 	}
 
 	//- UI stuff is rendered over everything else
-	game->get_window()->draw(score_txt);
 	hud.render(game->get_window());
 }
 

@@ -35,7 +35,7 @@ void IntroState::init(Game* game)
 		// menu_options[i]->setCharacterSize(15);
 		// menu_options[i]->setFont(font);
 
-	menu_options[0]->setString("START GAME (SINGLEPLAYER)");
+	menu_options[0]->setString("START GAME");
 	menu_options[1]->setString("HOST");
 	menu_options[2]->setString("JOIN");
 	menu_options[3]->setString("OPTIONS");
@@ -93,8 +93,8 @@ void IntroState::init(Game* game)
 void IntroState::win_init()
 {
 	for(int i = 0; i < MAX_OPTIONS; ++i)
-		menu_options[i]->setPosition(GAME_WIDTH/2-90, (i*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
-	selector.setPosition(GAME_WIDTH/2-114, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+		menu_options[i]->setPosition(GAME_WIDTH/2-MENU_OFFSET_X, (i*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+	selector.setPosition(GAME_WIDTH/2-MENU_OFFSET_X-24, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 	credits.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
 	version.setPosition(10, GAME_HEIGHT-30);
 }
@@ -114,7 +114,7 @@ void IntroState::move_selected(bool up)
 			selected_id--;
 	}
 
-	selector.setPosition(GAME_WIDTH/2-114, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+	selector.setPosition(GAME_WIDTH/2-MENU_OFFSET_X-24, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 
 }
 
