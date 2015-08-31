@@ -31,7 +31,7 @@ void GameState::init(Game* game)
 	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
 	player.init(game->get_gameobject(), 400, 400, 32, 32);
 	player.set_weapon(Weapon::WeaponEnum::PISTOL);
-	mobs.push_back(new Mob(150, 150, 16, 32));
+    mobs.push_back(new Mob(150, 150, 32, 32));
 
 	// mob.init(150, 150, 16, 32);
 
@@ -139,7 +139,6 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	if(mobs.size() > 0)
 	{
 		for(Mob* mob: mobs){
-			std::cout << mob->get_hp() << "\n";
 			mob->move2(player.get_x(), player.get_y());
 		}
 
