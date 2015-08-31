@@ -23,7 +23,7 @@ void Player::init(int x, int y, int w, int h)
 	this->lx = x;
 	this->ly = y;
 	vx = vy = 0;
-	this->speed = 250;
+	this->speed = 200;
 	this->health = 14;
 
 	//- Init sprite
@@ -33,15 +33,16 @@ void Player::init(int x, int y, int w, int h)
 	sprite.rotate(-90);
 	// sprite.setSize(sf::Vector2f(w, h));
 	sprite.setPosition(sf::Vector2f(x, y));
-	sprite.setOrigin(w/2, h/2);
-
 	this->bbox = sprite.getGlobalBounds();
+	sprite.setOrigin(w/2, h/2);
 
 	//- Init keys
 	keys["up"] = sf::Keyboard::W;
 	keys["down"] = sf::Keyboard::S;
 	keys["left"] = sf::Keyboard::A;
 	keys["right"] = sf::Keyboard::D;
+
+	inv_timer.restart();
 }
 
 void Player::handle_events(sf::Event *event)
@@ -66,38 +67,40 @@ void Player::move(sf::Time dt)
 {
     vx = vy = 0;
 
+    #define press(key) sf::Keyboard::isKeyPressed(key)
     if(!is_standard_movement)
     {
-		if(sf::Keyboard::isKeyPressed(keys["up"])){
+		if(press(keys["up"])){
 			vx -= speed * cos(sprite.getRotation() * RADIAN);
     		vy -= speed * sin(sprite.getRotation() * RADIAN);
-		}else if(sf::Keyboard::isKeyPressed(keys["down"])){
+		}else if(press(keys["down"])){
 			vx += speed * cos(sprite.getRotation()* RADIAN);
     		vy += speed * sin(sprite.getRotation()* RADIAN);
 		}
-		if(sf::Keyboard::isKeyPressed(keys["right"])){
+		if(press(keys["right"])){
 			vx += speed * sin(sprite.getRotation() * RADIAN);
 			vy -= speed * cos(sprite.getRotation() * RADIAN);
-		}else if(sf::Keyboard::isKeyPressed(keys["left"])){
+		}else if(press(keys["left"])){
 			vx -= speed * sin(sprite.getRotation()* RADIAN);
 			vy += speed * cos(sprite.getRotation()* RADIAN);
 		}
 	}else{
-		if(sf::Keyboard::isKeyPressed(keys["up"])){
+		if(press(keys["up"])){
 			vy -= speed;
 			// vy -= 1;
-		}else if(sf::Keyboard::isKeyPressed(keys["down"])){
+		}else if(press(keys["down"])){
 			vy += speed;
 			// vy += 1;
 		}
-		if(sf::Keyboard::isKeyPressed(keys["right"])){
+		if(press(keys["right"])){
 			vx += speed;
 			// vx += 1;
-		}else if(sf::Keyboard::isKeyPressed(keys["left"])){
+		}else if(press(keys["left"])){
 			vx -= speed;
 			// vx -= 1;
 		}
 	}
+	#undef t
 }
 
 //- DEPRECATED
@@ -158,35 +161,24 @@ void Player::move2(int xa, int ya, sf::Time dt, int state)
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 
-/*bool was_hurt (Mob* mob){
-if(mob->intersects (this)) return true;
-return false;
-
-}
-*/
-
-
-
 void Player::update(sf::Time deltaTime)
 {
 	move(deltaTime);
-	/*if (was_hurt(p , Mob)== true){
-        bool hurt= true;
-        sf::Clock clock;
-        sf::Clock elapsed;
-        float time = clock.restart().asSeconds();
-        bool invulnerable = true;
+	// if (was_hurt(p , Mob)== true){
+ //        bool hurt= true;
+ //        sf::Clock clock;
+ //        sf::Clock elapsed;
+ //        float time = clock.restart().asSeconds();
+ //        bool invulnerable = true;
 
-      //  if((float) elapsed.asSeconds() == 2.0f)
-            invulnerable - false;
-            hurt = false;
-	}
-	this->bbox = sprite.getGlobalBounds();
+ //      //  if((float) elapsed.asSeconds() == 2.0f)
+ //            invulnerable - false;
+ //            hurt = false;
+	// }
 	if(this->health <= 0)
 		is_dead = true;
-		*/
-
-
+		
+	this->bbox = sprite.getGlobalBounds();
 }
 
 void Player::set_weapon(int id)
@@ -194,7 +186,7 @@ void Player::set_weapon(int id)
 	switch(id)
 	{
 		case Weapon::WeaponEnum::PISTOL:{
-			this->weapon.init("Pistol", 999, 0.01f, 1);
+			this->weapon.init("Pistol", 999, 0.8f, 1);
 			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		case Weapon::WeaponEnum::SHOTGUN:{
@@ -202,7 +194,7 @@ void Player::set_weapon(int id)
 			this->weapon.set_id(Weapon::WeaponEnum::SHOTGUN);
 		}break;
 		case Weapon::WeaponEnum::M4A1:{
-			this->weapon.init("Machine gun", 999, 0.15f, 1);
+			this->weapon.init("M4A1", 999, 0.15f, 1);
 			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		default:{

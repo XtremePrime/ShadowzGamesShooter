@@ -36,9 +36,9 @@ void IntroState::init(Game* game)
 		// menu_options[i]->setFont(font);
 
 	menu_options[0]->setString("START GAME");
-	menu_options[1]->setString("HOST");
-	menu_options[2]->setString("JOIN");
-	menu_options[3]->setString("OPTIONS");
+	menu_options[1]->setString("COUCH COOP");
+	menu_options[2]->setString("OPTIONS");
+	menu_options[3]->setString("CREDITS");
 	menu_options[4]->setString("EXIT");
 
 	//- Init selector
@@ -87,7 +87,7 @@ void IntroState::init(Game* game)
 
 	notification_text_box = notification_text.getLocalBounds();
 	notification_text.setOrigin(notification_text_box.left + notification_text_box.width/2.0f, notification_text_box.top  + notification_text_box.height/2.0f);
-	notification_text.setPosition(sf::Vector2f(GAME_WIDTH/2.0f,GAME_HEIGHT/2.0f));
+	notification_text.setPosition(sf::Vector2f(GAME_WIDTH/2.0f,GAME_HEIGHT/2.0f+25));
 }
 
 void IntroState::win_init()
@@ -138,24 +138,24 @@ void IntroState::handle_events(Game* game, sf::Event event)
 			{
 				switch(selected_id)
 				{
-					case 0: //- Singleplayer
+					case 0: //- Start Game
 						 game->get_gameobject()->is_multiplayer = false;
 						 game->get_gameobject()->port = 7777;
 						 game->get_gameobject()->ip_address = "127.0.0.1";
 						 game->change_state(StageState::instance());
 						 music.stop();
 					break;
-					case 1: //- Host
+					case 1: //- Couch Coop
 						show_notification = true;
 						n_timer.restart();
 						// game->get_gameobject()->is_multiplayer = true;
 						// game->change_state(GameState::instance());
 					break;
-					case 2: //- Join
+					case 2: //- Options
 						show_notification = true;
 						n_timer.restart();
 					break;
-					case 3: //- Options
+					case 3: //- Credits
 						show_notification = true;
 						n_timer.restart();
 						// game->push_state(OptionsState::instance());

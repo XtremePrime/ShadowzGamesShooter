@@ -29,8 +29,9 @@ void GameState::init(Game* game)
 	level.init("res/levels/"+game->get_gameobject()->level_name+"/");
 
 	//- Init player
-	player.init(game->get_gameobject(), 400, 400, 32, 32);
-	player.set_weapon(Weapon::WeaponEnum::PISTOL);
+	//Always spawn the player in the middle of the map
+	player.init(game->get_gameobject(), (level.get_map_size().x*32)/2-32/2, (level.get_map_size().y*32)/2-32/2, 25, 31);
+	player.set_weapon(Weapon::WeaponEnum::M4A1);
 
 
 	//- Music & Sound init
@@ -47,10 +48,12 @@ void GameState::init(Game* game)
 	hud.init(font, game->get_gameobject()->width, game->get_gameobject()->height);
 
 	//- Enemies setup
+	splist.init(game->get_gameobject()->level_name);
 	wave = 0;
 	enemies_left = 0/*wave*5+wave*/;
-	// for(int i = 0; i < 999; ++i)
-		mobs.push_back(new BasicEnemy(150, 150, 32, 32, game->get_gameobject()->level_name));
+
+
+	this->level_name = game->get_gameobject()->level_name;
 
 
 	//- Setup game view
@@ -64,6 +67,7 @@ void GameState::player_shoot()
 	switch(player.get_weapon().get_id())
 	{
 		case Weapon::WeaponEnum::PISTOL:
+		case Weapon::WeaponEnum::M4A1:
 		{
 			//- One straight forward bullet, -1 from ammo, 1 sfx
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
@@ -82,13 +86,6 @@ void GameState::player_shoot()
 			ps(1);
 			#undef spread_angle
 		}
-		case Weapon::WeaponEnum::M4A1:
-		{
-			//- One straight forward bullet, -1 from ammo, 1 sfx
-			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
-			player.get_weapon().add_ammo(-1);
-			ps(1);
-		}
 		break;
 		default:
 			std::cout << "[GameState]: Error shooting weapon! Weird ID...\n";
@@ -104,13 +101,8 @@ void GameState::handle_events(Game* game, sf::Event event)
 	{
 		switch(event.key.code)
 		{
-			case sf::Keyboard::R:
+			case sf::Keyboard::Escape:
 			{
-				//@TODO: Open menu
-				game->get_window()->setView(game->get_window()->getDefaultView());
-				game->change_state(GameOverState::instance());
-
-				// game->quit();
 			}break;
 			default:
 			break;
@@ -158,6 +150,17 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	if(is_paused){return;}
 	level.update(deltaTime);
 	player.update(deltaTime);
+
+	//- Spawn updater
+	if(spawn_timer.getElapsedTime().asSeconds() >= 1.0f || left_to_spawn <= 0)
+	{
+		spawn_timer.restart();
+		if(this->splist.get_spawn_count() < left_to_spawn)
+			spawn_enemies(this->splist.get_spawn_count(), this->splist);
+		else
+			spawn_enemies(left_to_spawn, this->splist);
+	}
+
 	for(Mob* mob : mobs){
 		mob->update(deltaTime);
 	}
@@ -202,19 +205,19 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			bool state = false;
 			if(mob->can_move( level.get_tile( mob->get_y()+(mob->get_vy()*(float)(deltaTime.asSeconds())), mob->get_x())))
 			{
-				std::cout << "X2\n";
+				// std::cout << "X2\n";
 				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_Y);
 				state = true;
 			}
 			else if(mob->can_move( level.get_tile( mob->get_y()-(mob->get_vy()*(float)(deltaTime.asSeconds())), mob->get_x())))
 			{
-				std::cout << "X2-2\n";
+				// std::cout << "X2-2\n";
 				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_X);
 				state = true;
 			}
 			if(mob->can_move( level.get_tile( mob->get_y(), mob->get_x()+(mob->get_vx()*(float)(deltaTime.asSeconds())))))
 			{
-				std::cout << "X1\n";
+				// std::cout << "X1\n";
 				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, ONLY_X);
 				state = true;
 			}
@@ -224,7 +227,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 				state = true;
 			}
 			if(!state){
-				std::cout << "X4\n";
+				// std::cout << "X4\n";
 				mob->move2(mob->get_vx(), mob->get_vy(), deltaTime, BOTH);
 			}
 			#undef BOTH
@@ -233,10 +236,22 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			#undef t
 		}
 
+		//- Handle player X mob collision
+		for(Mob* mob : mobs)
+		{
+			if(mob->intersects(player) && !player.is_invincible())
+			{
+				player.set_invincibility(true);
+				player.get_inv_timer().restart();
+				player.hurt(mob->get_dmg());
+			}
+		}
+
 		for(int i = 0; i < mobs.size(); ++i){
 			if(mobs[i]->removed)
 			{
 				std::cout << "Deleting mob: " << i << "\n";
+				enemies_left--;
 				player.update_score(mobs[i]->get_points());
 				mobs[i] = nullptr;
 				mobs.erase(mobs.begin()+i);
@@ -249,18 +264,6 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		//- Check if bullet intersects mob
 		for(Bullet* bullet : bullets)
 		{
-			for(Mob* mob : mobs)
-            {
-                if(mob->intersects(*bullet))
-                {
-                    bullet->remove();
-                    mob->damage(bullet->get_dmg());
-                	break;
-                }
-            }
-            if(bullet->removed)
-            	break;
-
 			//- Check if bullets OOB
 			if(level.is_oob(bullet->get_x(), bullet->get_y()))
 				bullet->remove();
@@ -270,6 +273,16 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			if(!bullet->can_move( level.get_tile(bullet->get_y(), bullet->get_x())))
 				bullet->remove();
 			#undef t
+
+			for(Mob* mob : mobs)
+            {
+                if(mob->intersects(*bullet))
+                {
+                    bullet->remove();
+                    mob->hurt(bullet->get_dmg());
+                	break;
+                }
+            }
 		}
 		for(int i = 0; i < bullets.size(); ++i){
 			//- Bullet deletation
@@ -286,7 +299,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	{
 		music.stop();
 		game->get_window()->setView(game->get_window()->getDefaultView());
-		game->change_state(IntroState::instance());
+		game->change_state(GameOverState::instance());
 	}
 
 	//- Player rotation based on mouse loc
@@ -296,19 +309,19 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	for(Mob* m : mobs)
 		rotate2(m, game, deltaTime, sf::Vector2i(player.get_x(), player.get_y()));
 
-	// check_weapon_pickup(player);
+    hud.update(deltaTime, player, level, wave, enemies_left);
 
-	//- Collision test!
-	// if(player.intersects(mob))
-	// 	std::cout << "Collision!\n";
-    player.update(deltaTime);
-    hud.update(deltaTime, player, level);
+    if(player.get_inv_timer().getElapsedTime().asSeconds() >= 1.0f)
+    {
+    	player.set_invincibility(false);
+    }
 
     //- Check wave state & spawning
     if(enemies_left <= 0)
     {
     	++wave;
-    	spawn_enemies(wave*5+wave, this->splist);
+    	enemies_left = wave*5+wave;
+    	left_to_spawn = enemies_left;
     }
 
 	#define t(xr,yr,zr) (xr+zr)-(yr/2)
@@ -318,7 +331,9 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 
 void GameState::spawn_enemies(int amount, SpawnPointList& spl)
 {
-
+	for(int i = 0; i < amount; ++i)
+		mobs.push_back(new BasicEnemy(spl.get_sp(i).get_x(), spl.get_sp(i).get_y(), 32, 32, this->level_name));
+	left_to_spawn -= amount;
 }
 
 /*void GameState::check_weapon_pickup(Player& p)

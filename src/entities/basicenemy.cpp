@@ -23,8 +23,9 @@ void BasicEnemy::init(int x, int y, int w, int h, std::string path)
 	this->y = y;
 	this->w = w;
 	this->h = h;
-	this->speed = 50;
-	this->health = 10;
+	this->speed = 125;
+	this->damage = 1;
+	this->health = 5;
 	{
 		std::ostringstream ss;
 		ss << "res/models/";

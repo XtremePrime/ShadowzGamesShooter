@@ -34,7 +34,7 @@ private:
 
 	//- Timing stuff
 	sf::Clock item_cl;
-	sf::Clock mobs_cl;
+	sf::Clock spawn_timer;
 
 	//- Networking stuff (experimental)
 	sf::UdpSocket socket;
@@ -53,6 +53,9 @@ private:
 	SpawnPointList splist;
 	int wave;
 	int enemies_left;
+	int left_to_spawn;
+
+	std::string level_name;
 
 	void rotate(Player*, Game*, sf::Time);
 	void rotate2(Mob*, Game*, sf::Time, sf::Vector2i);

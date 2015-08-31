@@ -5,26 +5,31 @@
 #include "mob.h"
 #include "../gameobject.hpp"
 #include "../weapon.h"
+#include <SFML/System.hpp>
 
 class Player : public Mob
 {
 private:
+	int x, y, vx, vy, lx, ly;
 	sf::Vector2f acceleration;
 	int score = 0;
 	Weapon weapon;
+	bool is_dead = false;
+	sf::Clock inv_timer;
+	bool invincible = false;
 
 	std::map<std::string, sf::Keyboard::Key> keys;
 	bool is_standard_movement;
 public:
-    bool is_dead = false;
-    int x, y, vx, vy, lx, ly;
+
+
 	void init(GameObject* gameobj, int, int, int, int);
 	void init(int, int, int, int);
 	void handle_events(sf::Event*);
 	void render(sf::RenderWindow*);
 	void update(sf::Time);
 	void move(sf::Time);
-	
+
 	void move2(int, int, sf::Time, int);
     bool was_hurt (Player p, Mob* mob);
 
@@ -46,6 +51,10 @@ public:
 	Weapon& get_weapon() { return this->weapon; }
 	// void create_weapon(std::string name, int ammo, float delay, int dmg) { this->weapon.init(name, ammo, delay, dmg); }
 	void set_weapon(int id);
+	sf::Clock& get_inv_timer() { return this->inv_timer; }
+	bool is_invincible() { return this->invincible; }
+	void set_invincibility(bool state) { this->invincible = state; }
+	
 };
 
 #endif // PLAYER_H

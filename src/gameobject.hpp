@@ -28,7 +28,7 @@ public:
 	bool has_music = true;
 	bool has_sfx = true;
 	float volume = 1.0;
-	std::string version = "pre-v0.4 DEMO";
+	std::string version = "pre-v0.5 DEMO";
 	std::string username = "Demo Player";
 };
 
