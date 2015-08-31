@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<settings>
+	<DIMENSIONS-WINDOWED width="860" height="640" />
+	<DIMENSIONS-FULLSCREEN width="1440" height="900" />
+	<SCREEN fullscreen="false" />
+	<AUDIO music="false" volue="1.0" sfx="true" />
+	<CONTROLS standard-movement="true" />
+</settings>

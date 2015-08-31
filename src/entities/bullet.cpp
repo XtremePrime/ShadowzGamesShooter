@@ -22,6 +22,13 @@ void Bullet::init(int x, int y, int w, int h)
 
 }
 
+bool Bullet::can_move(Tile* tile)
+{
+	if(!tile->can_pass())
+		return false;
+	return true;
+}
+
 void Bullet::handle_events(sf::Event *event)
 {
 	if(!removed){}

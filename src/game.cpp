@@ -5,22 +5,26 @@
 
 
 #include <fstream>
-#include <direct.h>
+// #include <direct.h>
 
 void Game::init()
 {
 	//- Init GameObject stuff
-	char* tmp = getenv("APPDATA");
-	gameobject.appdata.assign(tmp);
-	std::string str = gameobject.appdata+"\\ShadowzGames";
-	mkdir(str.c_str());
-	gameobject.appdata = gameobject.appdata+"\\ShadowzGames\\";
+	// char* tmp = getenv("APPDATA");
+	// gameobject.appdata.assign(tmp);
+	// std::string str = gameobject.appdata+"\\ShadowzGames";
+	// mkdir(str.c_str());
+	// gameobject.appdata = gameobject.appdata+"\\ShadowzGames\\";
+	gameobject.appdata.assign("data/");
 
 	create_files(has_files());
 	setup_gameobject();
 
+	//- Init context settings
+	settings.antialiasingLevel = 8;
+
 	//- Init Win Window
-	this->window.create(sf::VideoMode(game_width, game_height), "Untitled Game "+gameobject.version, sf::Style::Titlebar | sf::Style::Close);
+	this->window.create(sf::VideoMode(game_width, game_height), "Deadly Stages "+gameobject.version, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize, settings);
 	this->window.setVerticalSyncEnabled(true);
 	this->window.setKeyRepeatEnabled(false);
 	this->window.setMouseCursorVisible(false);
@@ -34,8 +38,8 @@ void Game::init()
 
 	//- Load favicon
 	#define FAVICON_SIZE 32
-	// icon.loadFromFile("");
-	// window.setIcon(FAVICON_SIZE,FAVICON_SIZE,icon.getPixelsPtr());
+	icon.loadFromFile("res/screen/logo.png");
+	window.setIcon(73,54,icon.getPixelsPtr());
 	#undef FAVICON_SIZE
 }
 
@@ -139,7 +143,7 @@ int Game::has_files()
 
 	//- check for savegame file existence
 	std::ifstream savefile;
-	std::string savepath = gameobject.appdata+"\\savefile.txt";
+	std::string savepath = gameobject.appdata+"savegame.pcsav";
 	savefile.open(savepath);
 	if(!savefile.is_open()){
 		std::cout << "File not found:" << savepath << "\n";
@@ -189,7 +193,8 @@ void Game::handle_events(sf::Event ev)
 
 void Game::update(sf::Time dt)
 {
-	cursor.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+	sf::Vector2f vec = static_cast<sf::Vector2f>(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+	cursor.setPosition(vec.x-5, vec.y-5);
 	//- Update current state
 	state_stack.back()->update(this, dt);
 }

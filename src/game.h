@@ -21,6 +21,7 @@ private:
 	sf::Image icon;
 	sf::Texture cursor_txr;
 	sf::Sprite cursor;
+	sf::ContextSettings settings;
 
 	void init();
 	void create_files(int);

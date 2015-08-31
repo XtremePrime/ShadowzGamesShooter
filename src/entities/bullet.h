@@ -4,6 +4,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "entity.h"
+#include "../levels/tile.h"
 
 class Bullet : public Entity
 {
@@ -23,9 +24,11 @@ public:
     void handle_events(sf::Event *event);
     void update(sf::Time deltaTime);
     void render(sf::RenderWindow *win);
+    bool can_move(Tile* tile);
 
     // int get_hp() { return this->hp; }
     int get_dmg() { return this->damage; }
+    int get_speed() { return this->speed; }
     // bool get_death() { return this->is_dead; }
 };
 #endif

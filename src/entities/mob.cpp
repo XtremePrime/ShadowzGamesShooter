@@ -29,7 +29,7 @@ void Mob::init(int x, int y, int w, int h)
 	this->w = w;
 	this->h = h;
 	this->health = 10;
-	texture.loadFromFile("res/models/demon_tank.png");
+	texture.loadFromFile("res/models/devtest/default.png");
 	sprite.setTexture(texture);
 	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
 	sprite.rotate(-90);
@@ -41,41 +41,43 @@ void Mob::init(int x, int y, int w, int h)
 	this->bbox = sprite.getGlobalBounds();
 }
 
-void Mob::move2(int xp, int yp)
+bool Mob::can_move(Tile* tile)
 {
-
-     if(this->x<xp)
-                this->x++ *speed;
-     if(this->x>xp)
-                this->x-- *speed;
-     if(this->y<yp)
-                this->y++ *speed;
-     if(this->y>yp)
-                this->y-- *speed;
-
-
-	sprite.setPosition(sf::Vector2f(x, y));
-
-
-   /* //- Set direction
-	if(y == -1)
-		dir = Direction::UP;
-	else if(y == 1)
-		dir = Direction::DOWN;
-	if(x == -1)
-		dir = Direction::LEFT;
-	else if(x == 1)
-		dir = Direction::RIGHT;
-
-
-*/
-}
-/*bool Mob::hasCollision(Tile* tile)
-{
-	if(tile->may_pass() == true)
+	if(!tile->can_pass())
 		return false;
 	return true;
-}*/
+}
+
+void Mob::move(sf::Time dt)
+{
+	vx = vy = 0;
+
+	#define RADIAN (3.14159265 / 180.)
+
+	vx -= speed * cos(sprite.getRotation() * RADIAN);
+    vy -= speed * sin(sprite.getRotation() * RADIAN);
+
+    #undef RADIAN
+}
+
+void Mob::move2(int xa, int ya, sf::Time dt, int state)
+{
+	switch(state)
+	{
+		case 0:
+			this->x += (xa) * dt.asSeconds();
+			this->y += (ya) * dt.asSeconds();
+		break;
+		case 1:
+			this->x += (xa) * dt.asSeconds();
+		break;
+		case 2:
+			this->y += (ya) * dt.asSeconds();
+		break;
+	}
+
+	sprite.setPosition(sf::Vector2f(x, y));
+}
 
 
 
@@ -89,6 +91,7 @@ void Mob::update(sf::Time deltaTime)
 {
 	if(health <= 0)
 		remove();
+	move(deltaTime);
 	this->bbox = sprite.getGlobalBounds();
 }
 

@@ -27,17 +27,10 @@ private:
 			x = xx;
 			y = yy;
 			std::string path = "res/levels/"+name+"/map.png";
-			std::cout << path << "\n";
 			txr.loadFromFile(path);
 			sprite.setTexture(txr);
 			sprite.setPosition(sf::Vector2f(x, y));
 			sprite.setScale(s/sprite.getLocalBounds().width, s/sprite.getLocalBounds().height);
-
-			// text->setCharacterSize(15);
-			// text->setFont(f);
-			// text->setColor(sf::Color::White);
-			// text->setString(title);
-			// text->setPosition(sf::Vector2f(0, 0));
 		}
 	};
 

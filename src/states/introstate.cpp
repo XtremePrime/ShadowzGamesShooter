@@ -35,10 +35,10 @@ void IntroState::init(Game* game)
 		// menu_options[i]->setCharacterSize(15);
 		// menu_options[i]->setFont(font);
 
-	menu_options[0]->setString("START GAME (SINGLEPLAYER)");
-	menu_options[1]->setString("HOST");
-	menu_options[2]->setString("JOIN");
-	menu_options[3]->setString("OPTIONS");
+	menu_options[0]->setString("START GAME");
+	menu_options[1]->setString("COUCH COOP");
+	menu_options[2]->setString("OPTIONS");
+	menu_options[3]->setString("CREDITS");
 	menu_options[4]->setString("EXIT");
 
 	//- Init selector
@@ -62,6 +62,16 @@ void IntroState::init(Game* game)
 	blackbox.setFillColor(sf::Color::Black);
 	blackbox.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
 
+	//- Init titlescreen
+	ts_txr.loadFromFile("res/screen/title_screen.png");
+	title_screen.setTexture(ts_txr);
+	title_screen.scale(1.3f, 1.1f);
+	{
+		sf::FloatRect ts_box = title_screen.getLocalBounds();
+		title_screen.setOrigin(ts_box.left+ts_box.width/2.0f,ts_box.top+ts_box.height/2.0f);
+		title_screen.setPosition(GAME_WIDTH/2.0f, 50+(285*1.1f)/2);
+	}
+
 	win_init();
 
 	//- Sound & Music init
@@ -77,14 +87,14 @@ void IntroState::init(Game* game)
 
 	notification_text_box = notification_text.getLocalBounds();
 	notification_text.setOrigin(notification_text_box.left + notification_text_box.width/2.0f, notification_text_box.top  + notification_text_box.height/2.0f);
-	notification_text.setPosition(sf::Vector2f(GAME_WIDTH/2.0f,GAME_HEIGHT/2.0f));
+	notification_text.setPosition(sf::Vector2f(GAME_WIDTH/2.0f,GAME_HEIGHT/2.0f+25));
 }
 
 void IntroState::win_init()
 {
 	for(int i = 0; i < MAX_OPTIONS; ++i)
-		menu_options[i]->setPosition(GAME_WIDTH/2-90, (i*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
-	selector.setPosition(GAME_WIDTH/2-114, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+		menu_options[i]->setPosition(GAME_WIDTH/2-MENU_OFFSET_X, (i*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+	selector.setPosition(GAME_WIDTH/2-MENU_OFFSET_X-24, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 	credits.setPosition(GAME_WIDTH-310, GAME_HEIGHT-30);
 	version.setPosition(10, GAME_HEIGHT-30);
 }
@@ -104,7 +114,7 @@ void IntroState::move_selected(bool up)
 			selected_id--;
 	}
 
-	selector.setPosition(GAME_WIDTH/2-114, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
+	selector.setPosition(GAME_WIDTH/2-MENU_OFFSET_X-24, (selected_id*32)+(GAME_HEIGHT/2)+MENU_OFFSET_Y);
 
 }
 
@@ -128,24 +138,24 @@ void IntroState::handle_events(Game* game, sf::Event event)
 			{
 				switch(selected_id)
 				{
-					case 0: //- Singleplayer
+					case 0: //- Start Game
 						 game->get_gameobject()->is_multiplayer = false;
 						 game->get_gameobject()->port = 7777;
 						 game->get_gameobject()->ip_address = "127.0.0.1";
 						 game->change_state(StageState::instance());
 						 music.stop();
 					break;
-					case 1: //- Host
+					case 1: //- Couch Coop
 						show_notification = true;
 						n_timer.restart();
 						// game->get_gameobject()->is_multiplayer = true;
 						// game->change_state(GameState::instance());
 					break;
-					case 2: //- Join
+					case 2: //- Options
 						show_notification = true;
 						n_timer.restart();
 					break;
-					case 3: //- Options
+					case 3: //- Credits
 						show_notification = true;
 						n_timer.restart();
 						// game->push_state(OptionsState::instance());
@@ -188,13 +198,14 @@ void IntroState::update(Game* game,  sf::Time deltaTime)
 
 void IntroState::render(Game* game)
 {
+	game->get_window()->draw(title_screen);
 	for(int i = 0; i < menu_options.size(); ++i)
 		game->get_window()->draw(*menu_options[i]);
 	game->get_window()->draw(selector);
 	game->get_window()->draw(credits);
 	game->get_window()->draw(version);
 	game->get_window()->draw(blackbox);
-
+	
 	if(show_notification)
 		game->get_window()->draw(notification_text);
 }

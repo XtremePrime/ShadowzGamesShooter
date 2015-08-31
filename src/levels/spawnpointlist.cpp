@@ -2,8 +2,9 @@
 
 void SpawnPointList::init(std::string path)
 {
-	this->path = path+"spawnpoints.txt";
+	this->path = "res/levels/"+path+"/spawnpoints.txt";
 	load_file(this->path);
+	timer.restart();
 }
 
 void SpawnPointList::load_file(std::string path)
@@ -51,6 +52,7 @@ void SpawnPointList::load_file(std::string path)
 		#define X atoi(tokens[0].c_str())
 		#define Y atoi(tokens[1].c_str())
 		splist.push_back(new SpawnPoint(X, Y));
+		spawn_count++;
 		#undef X
 		#undef Y
 	}
@@ -62,4 +64,11 @@ SpawnPoint* SpawnPointList::get_sp(int xx, int yy)
 		if(sp->get_x() == xx && sp->get_y() == yy)
 			return sp;
 	return nullptr;
+}
+
+void SpawnPointList::cleanup()
+{
+	for(int i = 0; i < splist.size(); ++i)
+		delete (splist[i]);
+ 	splist.clear();
 }

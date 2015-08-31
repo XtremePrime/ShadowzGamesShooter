@@ -48,6 +48,8 @@
 		<Linker>
 			<Add directory="lib" />
 		</Linker>
+		<Unit filename="src/entities/basicenemy.cpp" />
+		<Unit filename="src/entities/basicenemy.h" />
 		<Unit filename="src/entities/bullet.cpp" />
 		<Unit filename="src/entities/bullet.h" />
 		<Unit filename="src/entities/entity.h" />
@@ -78,6 +80,8 @@
 		<Unit filename="src/screen/hud.cpp" />
 		<Unit filename="src/screen/hud.h" />
 		<Unit filename="src/soundmanager.h" />
+		<Unit filename="src/states/gameoverstate.cpp" />
+		<Unit filename="src/states/gameoverstate.h" />
 		<Unit filename="src/states/gamestate.cpp" />
 		<Unit filename="src/states/gamestate.h" />
 		<Unit filename="src/states/introstate.cpp" />
