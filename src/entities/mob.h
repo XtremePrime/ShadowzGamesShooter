@@ -31,6 +31,7 @@ public:
 
     int get_points(){return this->points;}
     int get_hp() { return this->health; }
+    void heal(int amount) { this->health += amount; }
     int get_dmg() { return this->damage; }
     void hurt(int dmg){this->health -= dmg;}
     int get_vx() { return this->vx; }

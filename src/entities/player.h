@@ -5,6 +5,7 @@
 #include "mob.h"
 #include "../gameobject.hpp"
 #include "../weapon.h"
+#include "pickup.h"
 #include <SFML/System.hpp>
 
 class Player : public Mob
@@ -51,10 +52,11 @@ public:
 	Weapon& get_weapon() { return this->weapon; }
 	// void create_weapon(std::string name, int ammo, float delay, int dmg) { this->weapon.init(name, ammo, delay, dmg); }
 	void set_weapon(int id);
+	void get_pickup(int id);
 	sf::Clock& get_inv_timer() { return this->inv_timer; }
 	bool is_invincible() { return this->invincible; }
 	void set_invincibility(bool state) { this->invincible = state; }
-	
+
 };
 
 #endif // PLAYER_H

@@ -7,9 +7,9 @@ BasicEnemy::BasicEnemy()
 
 }
 
-BasicEnemy::BasicEnemy(int x, int y, int w, int h, std::string path)
+BasicEnemy::BasicEnemy(int x, int y, int w, int h, int sp, std::string path)
 {
-    init(x,y,w,h,path);
+    init(x,y,w,h,sp,path);
 }
 
 BasicEnemy::~BasicEnemy()
@@ -17,13 +17,13 @@ BasicEnemy::~BasicEnemy()
     //TODO
 }
 
-void BasicEnemy::init(int x, int y, int w, int h, std::string path)
+void BasicEnemy::init(int x, int y, int w, int h, int sp, std::string path)
 {
 	this->x = x;
 	this->y = y;
 	this->w = w;
 	this->h = h;
-	this->speed = 125;
+	this->speed = sp;
 	this->damage = 1;
 	this->health = 5;
 	{
@@ -34,7 +34,6 @@ void BasicEnemy::init(int x, int y, int w, int h, std::string path)
 		texture.loadFromFile(ss.str());
 	}
 	sprite.setTexture(texture);
-	sprite.setTextureRect(sf::IntRect(0, 0, w, h));
 	sprite.rotate(-90);
 	// sprite.setSize(sf::Vector2f(w, h));
 	sprite.setPosition(sf::Vector2f(x, y));

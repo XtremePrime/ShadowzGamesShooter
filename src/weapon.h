@@ -12,6 +12,7 @@ private:
 	std::string name;
 	int damage;
 	int ammo;
+	bool has_infinite_ammo = false;
 
 	float delay;
 	sf::Clock fire_timer;
@@ -34,7 +35,7 @@ public:
 	{
 		PISTOL = 0,
 		SHOTGUN = 1,
-		M4A1 = 2
+		SMG = 2
 	} weapon_list;
 };
 

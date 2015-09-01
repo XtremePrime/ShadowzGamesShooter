@@ -13,9 +13,9 @@ class BasicEnemy : public Mob
 private:
 public:
     BasicEnemy();
-	BasicEnemy(int, int, int, int, std::string);
+	BasicEnemy(int, int, int, int, int, std::string);
 	~BasicEnemy();
-	void init(int x, int y, int w, int h, std::string path);
+	void init(int x, int y, int w, int h, int sp, std::string path);
 };
 
 #endif // BASICENEMY_H

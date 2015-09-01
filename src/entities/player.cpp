@@ -164,20 +164,12 @@ void Player::move2(int xa, int ya, sf::Time dt, int state)
 void Player::update(sf::Time deltaTime)
 {
 	move(deltaTime);
-	// if (was_hurt(p , Mob)== true){
- //        bool hurt= true;
- //        sf::Clock clock;
- //        sf::Clock elapsed;
- //        float time = clock.restart().asSeconds();
- //        bool invulnerable = true;
-
- //      //  if((float) elapsed.asSeconds() == 2.0f)
- //            invulnerable - false;
- //            hurt = false;
-	// }
 	if(this->health <= 0)
 		is_dead = true;
-		
+
+	if(this->weapon.get_ammo() <= 0)
+		set_weapon(Weapon::WeaponEnum::PISTOL);
+
 	this->bbox = sprite.getGlobalBounds();
 }
 
@@ -186,19 +178,49 @@ void Player::set_weapon(int id)
 	switch(id)
 	{
 		case Weapon::WeaponEnum::PISTOL:{
-			this->weapon.init("Pistol", 999, 0.8f, 1);
+			this->weapon.init("Pistol", 999, 0.75f, 1);
 			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		case Weapon::WeaponEnum::SHOTGUN:{
-			this->weapon.init("Shotgun", 999, 1.3f, 1);
+			this->weapon.init("Shotgun", 90, 1.3f, 3);
 			this->weapon.set_id(Weapon::WeaponEnum::SHOTGUN);
 		}break;
-		case Weapon::WeaponEnum::M4A1:{
-			this->weapon.init("M4A1", 999, 0.15f, 1);
+		case Weapon::WeaponEnum::SMG:{
+			this->weapon.init("Sub Machinegun", 240, 0.15f, 1);
 			this->weapon.set_id(Weapon::WeaponEnum::PISTOL);
 		}break;
 		default:{
 			std::cerr << "[Player]: Error setting weapon!\n";
 		}break;
+	}
+}
+
+void Player::get_pickup(int id)
+{
+	switch(id)
+	{
+		case Pickup::PickupCodes::HEALTH:
+		{
+			heal(2);
+			if(this->health > 14)
+				this->health = 14;
+		}break;
+		case Pickup::PickupCodes::SHOTGUN:
+		{
+			if(this->weapon.get_id() == Weapon::WeaponEnum::SHOTGUN)
+				this->weapon.add_ammo(30);
+			else
+				set_weapon(Weapon::WeaponEnum::SHOTGUN);
+		}break;
+		case Pickup::PickupCodes::SMG:
+		{
+			if(this->weapon.get_id() == Weapon::WeaponEnum::SMG)
+				this->weapon.add_ammo(60);
+			else
+				set_weapon(Weapon::WeaponEnum::SMG);
+		}break;
+		default:
+			std::cerr << "[Player]: Error getting pickup!\n";
+		break;
 	}
 }

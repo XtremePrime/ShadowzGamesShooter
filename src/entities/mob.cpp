@@ -38,6 +38,14 @@ void Mob::init(int x, int y, int w, int h)
 	sprite.setOrigin(w/2, h/2);
 	// vx = vy = 0;
 
+	rect.setPosition(sf::Vector2f(x, y));
+	rect.setFillColor(sf::Color::Red);
+	// rect.setOutlineColor(sf::Color::Black);
+	// rect.setOutlineThickness(2.0f);
+	rect.setSize(sf::Vector2f(w, h));
+	rect.setOrigin(w/2, h/2);
+
+
 	this->bbox = sprite.getGlobalBounds();
 }
 
@@ -76,6 +84,8 @@ void Mob::move2(int xa, int ya, sf::Time dt, int state)
 		break;
 	}
 
+
+	// rect.setPosition(sf::Vector2f(x, y));
 	sprite.setPosition(sf::Vector2f(x, y));
 }
 
@@ -89,16 +99,20 @@ void Mob::handle_events(sf::Event *event)
 
 void Mob::update(sf::Time deltaTime)
 {
+	// std::cout << "Bbox: " << this->bbox.top << "," << this->bbox.left << "\n";
 	if(health <= 0)
 		remove();
 	move(deltaTime);
 	this->bbox = sprite.getGlobalBounds();
+	// this->bbox = sprite.getGlobalBounds();
 }
 
 void Mob::render(sf::RenderWindow *win)
 {
 	if(!removed)
 	{
+		// std::cout << "Render!\n";
 		win->draw(sprite);
+		// win->draw(rect);
 	}
 }

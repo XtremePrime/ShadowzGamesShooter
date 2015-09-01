@@ -51,7 +51,7 @@ void Hud::update(sf::Time deltaTime, Player& player, Level& level, int cur_w, in
 	#define set_y(yr) 5+(yr)-(level.get_view().getSize().y/2)
 	// hpbar.setPosition(t((player.get_x()+screen_width)-280, level.get_view().getSize().x), t((player.get_y()+screen_height)-35, level.get_view().getSize().y));
 	score.setPosition(set_x(player.get_x()+0), set_y(player.get_y()+0));
-	wave.setPosition(set_x(player.get_x()+200), set_y(player.get_y()+0));
+	wave.setPosition(set_x(player.get_x()+210), set_y(player.get_y()+0));
 	enemies_left.setPosition(set_x(player.get_x()+400), set_y(player.get_y()+0));
 	hpbar.setPosition(set_x(player.get_x()+280), set_y((player.get_y()+screen_height)-35));
 	#undef set_y

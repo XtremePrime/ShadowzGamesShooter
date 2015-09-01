@@ -1,7 +1,4 @@
 #include "gamestate.h"
-#include "introstate.h"
-
-#include <sstream>
 
 GameState* GameState::_instance;
 GameState* GameState::instance(){
@@ -32,7 +29,7 @@ void GameState::init(Game* game)
 	//- Init player
 	//Always spawn the player in the middle of the map
 	player.init(game->get_gameobject(), (level.get_map_size().x*32)/2-32/2, (level.get_map_size().y*32)/2-32/2, 25, 31);
-	player.set_weapon(Weapon::WeaponEnum::M4A1);
+	player.set_weapon(Weapon::WeaponEnum::PISTOL);
 
 
 	//- Music & Sound init
@@ -68,11 +65,10 @@ void GameState::player_shoot()
 	switch(player.get_weapon().get_id())
 	{
 		case Weapon::WeaponEnum::PISTOL:
-		case Weapon::WeaponEnum::M4A1:
 		{
 			//- One straight forward bullet, -1 from ammo, 1 sfx
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
-			player.get_weapon().add_ammo(-1);
+			// player.get_weapon().add_ammo(-1);
 			ps(1);
 		}
 		break;
@@ -86,6 +82,13 @@ void GameState::player_shoot()
 			player.get_weapon().add_ammo(-3);
 			ps(1);
 			#undef spread_angle
+		}
+		break;
+		case Weapon::WeaponEnum::SMG:
+		{
+			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
+			player.get_weapon().add_ammo(-1);
+			ps(1);
 		}
 		break;
 		default:
@@ -104,6 +107,9 @@ void GameState::handle_events(Game* game, sf::Event event)
 		{
 			case sf::Keyboard::Escape:
 			{
+				music.stop();
+				game->get_window()->setView(game->get_window()->getDefaultView());
+				game->change_state(IntroState::instance());
 			}break;
 			default:
 			break;
@@ -145,6 +151,21 @@ void GameState::handle_events(Game* game, sf::Event event)
 	}
 }
 
+bool GameState::check_mob_collision(float x, float y, int idx)
+{
+	Mob m;
+	m.init(x, y, 32, 32);
+	for(int i = 0; i < mobs.size(); ++i)
+	{
+		if(idx == i) continue;
+		if(m.intersects(*mobs[i])){
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void GameState::update(Game* game,  sf::Time deltaTime)
 {
 	//- update EVERYTHING
@@ -167,6 +188,9 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	}
 	for(Bullet* bullet : bullets){
 		bullet->update(deltaTime);
+	}
+	for(Pickup* pc : pickups){
+		pc->update(deltaTime);
 	}
 
 	//- Update player movement
@@ -192,9 +216,90 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 		player_shoot();
 	}
 
-	//- Check deletation of mobs
 	if(mobs.size() > 0)
 	{
+		/*for(int i = 0; i < mobs.size(); ++i)
+		{
+			//- MOB X TILE COLLISION TEST. REFACTOR ASAP
+			//- COMMENT ASAP
+			#define BOTH 0
+			#define ONLY_X 1
+			#define ONLY_Y 2
+			bool state = false;
+			if(mobs[i]->can_move( level.get_tile( mobs[i]->get_y()+(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), mobs[i]->get_x())))
+			{
+				std::cout << i << ": X2\n";
+				if(!check_mob_collision((float)mobs[i]->get_x(), mobs[i]->get_y()+(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_Y);
+					state = true;
+				}
+			}
+			else if(mobs[i]->can_move( level.get_tile( mobs[i]->get_y()-(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), mobs[i]->get_x())))
+			{
+				std::cout << i << ": X2-2\n";
+				if(!check_mob_collision((float)mobs[i]->get_x(), mobs[i]->get_y()-(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_X);
+					state = true;
+				}
+			}
+			if(mobs[i]->can_move( level.get_tile( mobs[i]->get_y(), mobs[i]->get_x()+(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())))))
+			{
+				std::cout << i << ": X1\n";
+				if(!check_mob_collision(mobs[i]->get_x()+(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())), (float)mobs[i]->get_y(), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_X);
+					state = true;
+				}
+
+			}
+			else if(mobs[i]->can_move( level.get_tile( mobs[i]->get_y(), mobs[i]->get_x()-(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())))))
+			{
+				std::cout << i << ": X3\n";
+				if(!check_mob_collision(mobs[i]->get_x()-(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())) , (float)mobs[i]->get_y(), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_Y);
+					state = true;
+				}
+
+			}
+			if(!state){
+				std::cout << i << ": X4\n";
+				if(!check_mob_collision((float)mobs[i]->get_x(), mobs[i]->get_y()+(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_Y);
+					state = true;
+				}
+				else if(!check_mob_collision((float)mobs[i]->get_x(), mobs[i]->get_y()-(mobs[i]->get_vy()*(float)(deltaTime.asSeconds())), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_X);
+					state = true;
+				}
+				if(!check_mob_collision(mobs[i]->get_x()+(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())), (float)mobs[i]->get_y(), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_X);
+					state = true;
+				}
+				else if(!check_mob_collision(mobs[i]->get_x()-(mobs[i]->get_vx()*(float)(deltaTime.asSeconds())) , (float)mobs[i]->get_y(), i))
+				{
+					
+					mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, ONLY_Y);
+					state = true;
+				}
+				// mobs[i]->move2(mobs[i]->get_vx(), mobs[i]->get_vy(), deltaTime, BOTH);
+			}
+			#undef BOTH
+			#undef ONLY_X
+			#undef ONLY_Y
+		}*/
 		for(Mob* mob: mobs)
 		{
 			//- MOB X TILE COLLISION TEST. REFACTOR ASAP
@@ -248,9 +353,11 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			}
 		}
 
+		//- Check deletation of mobs
 		for(int i = 0; i < mobs.size(); ++i){
 			if(mobs[i]->removed)
 			{
+				generate_pickup(mobs[i]->get_x(), mobs[i]->get_y());
 				std::cout << "Deleting mob: " << i << "\n";
 				enemies_left--;
 				player.update_score(mobs[i]->get_points());
@@ -259,6 +366,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			}
 		}
 	}
+
 
 	if(bullets.size() > 0)
 	{
@@ -312,10 +420,35 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 
     hud.update(deltaTime, player, level, wave, enemies_left);
 
-    if(player.get_inv_timer().getElapsedTime().asSeconds() >= 1.0f)
+    if(player.get_inv_timer().getElapsedTime().asSeconds() >= 0.5f)
     {
     	player.set_invincibility(false);
     }
+
+    //- Handle player pickup
+    for(Pickup* pc : pickups)
+    {
+    	if(pc->intersects(player))
+    	{
+			player.get_pickup(pc->get_id());
+			pc->remove();
+    	}
+
+    	if(pc->get_timer().getElapsedTime().asSeconds() >=  10.0f)
+    		pc->remove();
+    }
+
+    //- Handle pickup deletation
+    for(int i = 0; i < pickups.size(); ++i)
+    {
+    	if(pickups[i]->removed)
+    	{
+    		std::cout << "Deleting pickup: " << i << "\n";
+			pickups[i] = nullptr;
+			pickups.erase(pickups.begin()+i);
+    	}
+    }		
+
 
     //- Check wave state & spawning
     if(enemies_left <= 0)
@@ -323,6 +456,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     	++wave;
     	enemies_left = wave*5+wave;
     	left_to_spawn = enemies_left;
+    	enemy_speed *= 1.05f;
     }
 
 	#define t(xr,yr,zr) (xr+zr)-(yr/2)
@@ -333,7 +467,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 void GameState::spawn_enemies(int amount, SpawnPointList& spl)
 {
 	for(int i = 0; i < amount; ++i)
-		mobs.push_back(new BasicEnemy(spl.get_sp(i).get_x(), spl.get_sp(i).get_y(), 32, 32, this->level_name));
+		mobs.push_back(new BasicEnemy(spl.get_sp(i).get_x(), spl.get_sp(i).get_y(), 32, 32, (int)enemy_speed, this->level_name));
 	left_to_spawn -= amount;
 }
 
@@ -392,6 +526,19 @@ void GameState::rotate2(Mob* mob, Game* game, sf::Time deltaTime, sf::Vector2i p
 	#undef DEGREE
 }
 
+void GameState::generate_pickup(int x, int y)
+{
+	// pickups.push_back(new Pickup(Pickup::PickupCodes::HEALTH, x, y, 32, 32));
+	for(int i = 0; i < 3; ++i)
+	{
+		int r = rand()%100;
+		if(r < 15){
+			pickups.push_back(new Pickup(i, x, y, 32, 32));
+			return;
+		}
+	}
+}
+
 void GameState::render(Game* game)
 {
 	//- render EVERYTHING
@@ -400,6 +547,9 @@ void GameState::render(Game* game)
 	player.render(game->get_window());
 	for(Mob* mob : mobs){
 		mob->render(game->get_window());
+	}
+	for(Pickup* pc : pickups){
+		pc->render(game->get_window());
 	}
 	for(Bullet* bullet : bullets){
 		bullet->render(game->get_window());
@@ -414,6 +564,7 @@ void GameState::cleanup()
 {
 	clear_vector(mobs);
 	clear_vector(bullets);
+	clear_vector(pickups);
 
 	_instance = NULL;
 }
