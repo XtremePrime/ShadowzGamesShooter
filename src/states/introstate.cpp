@@ -75,9 +75,11 @@ void IntroState::init(Game* game)
 	win_init();
 
 	//- Sound & Music init
-	music.openFromFile("res/music/mainmenu.flac");
-	if(game->get_gameobject()->has_music)
+	music.openFromFile("res/music/mainmenu.wav");
+	if(game->get_gameobject()->has_music){
+		music.setVolume(game->get_gameobject()->volume);
 		music.play();
+	}
 
 	//- Init notification text
 	notification_text.setCharacterSize(25);
@@ -156,9 +158,7 @@ void IntroState::handle_events(Game* game, sf::Event event)
 						n_timer.restart();
 					break;
 					case 3: //- Credits
-						show_notification = true;
-						n_timer.restart();
-						// game->push_state(OptionsState::instance());
+						game->push_state(CreditsState::instance());
 
 						// if(!game->get_fullscreen())
 						// {
@@ -205,7 +205,7 @@ void IntroState::render(Game* game)
 	game->get_window()->draw(credits);
 	game->get_window()->draw(version);
 	game->get_window()->draw(blackbox);
-	
+
 	if(show_notification)
 		game->get_window()->draw(notification_text);
 }

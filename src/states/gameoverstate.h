@@ -13,7 +13,7 @@ class GameOverState : public State
 private:
 	sf::Font font;
 
-	int GAME_WIDTH, GAME_HEIGHT, MENU_OFFSET_Y = 90;
+	int GAME_WIDTH, GAME_HEIGHT, MENU_OFFSET_Y = 90, MENU_OFFSET_X = 50;
 	sf::RectangleShape selector;
 	sf::Texture ts_txr;
 	sf::Sprite title_screen;
@@ -23,6 +23,9 @@ private:
 
 	//- Audio stuff
 	sf::Music music;
+	sf::Clock music_delay;
+
+	sf::Text review;
 
 	void move_selected(bool);
 	void win_init();

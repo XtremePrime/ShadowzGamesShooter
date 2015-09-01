@@ -3,6 +3,6 @@
 	<DIMENSIONS-WINDOWED width="860" height="640" />
 	<DIMENSIONS-FULLSCREEN width="1440" height="900" />
 	<SCREEN fullscreen="false" />
-	<AUDIO music="false" volue="1.0" sfx="true" />
+	<AUDIO music="true" volume="50" sfx="true" />
 	<CONTROLS standard-movement="true" />
 </settings>

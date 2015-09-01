@@ -44,7 +44,7 @@ private:
 	sf::Text level_names[t];
 	#undef t
 
-	sf::SoundBuffer shoot_buf; sf::Sound shoot_snd;
+	sf::Music music;
 
 	void send_to_level(Game*);
 	void move_selected(int);

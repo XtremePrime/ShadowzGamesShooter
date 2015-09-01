@@ -41,6 +41,11 @@ void Player::init(int x, int y, int w, int h)
 	keys["down"] = sf::Keyboard::S;
 	keys["left"] = sf::Keyboard::A;
 	keys["right"] = sf::Keyboard::D;
+	keys["arrow-up"] = sf::Keyboard::Up;
+	keys["arrow-down"] = sf::Keyboard::Down;
+	keys["arrow-left"] = sf::Keyboard::Left;
+	keys["arrow-right"] = sf::Keyboard::Right;
+
 
 	inv_timer.restart();
 }
@@ -85,17 +90,17 @@ void Player::move(sf::Time dt)
 			vy += speed * cos(sprite.getRotation()* RADIAN);
 		}
 	}else{
-		if(press(keys["up"])){
+		if(press(keys["up"]) || press(keys["arrow-up"])){
 			vy -= speed;
 			// vy -= 1;
-		}else if(press(keys["down"])){
+		}else if(press(keys["down"]) || press(keys["arrow-down"])){
 			vy += speed;
 			// vy += 1;
 		}
-		if(press(keys["right"])){
+		if(press(keys["right"]) || press(keys["arrow-right"])){
 			vx += speed;
 			// vx += 1;
-		}else if(press(keys["left"])){
+		}else if(press(keys["left"]) || press(keys["arrow-left"])){
 			vx -= speed;
 			// vx -= 1;
 		}

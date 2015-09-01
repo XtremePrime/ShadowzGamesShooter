@@ -6,6 +6,9 @@
 #include <vector>
 #include <cstdlib>
 #include "state.h"
+#include "creditsstate.h"
+#include "gamestate.h"
+#include "stagestate.h"
 
 class IntroState : public State
 {

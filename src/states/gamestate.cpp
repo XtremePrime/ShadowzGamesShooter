@@ -9,12 +9,12 @@ GameState* GameState::instance(){
 
 void GameState::init(Game* game)
 {
-	this->ip_address = game->get_gameobject()->ip_address;
-	this->port = game->get_gameobject()->port;
-	this->has_sfx = game->get_gameobject()->has_sfx;
-	//- Binding to the port to establish connection
-	if (socket.bind(port) != sf::Socket::Done)
-		std::cout << "Could not connect to: " << "localhost" << "!\n";
+	// this->ip_address = game->get_gameobject()->ip_address;
+	// this->port = game->get_gameobject()->port;
+	// this->has_sfx = game->get_gameobject()->has_sfx;
+	// //- Binding to the port to establish connection
+	// if (socket.bind(port) != sf::Socket::Done)
+	// 	std::cout << "Could not connect to: " << "localhost" << "!\n";
 
 	// char data[] = "abc";
 	// if (socket.send(data, 3, game->get_gameobject()->ip_address, game->get_gameobject()->port) != sf::Socket::Done)
@@ -33,13 +33,13 @@ void GameState::init(Game* game)
 
 
 	//- Music & Sound init
-	music.openFromFile("res/music/"+game->get_gameobject()->level_name+"/theme.flac");
+	if(!music.openFromFile("res/music/"+game->get_gameobject()->level_name+"/theme.wav"))
+		std::cerr << "[Music]: Error opening file for level: " << game->get_gameobject()->level_name << "\n";
 	music.setLoop(true);
-	if(game->get_gameobject()->has_music)
+	if(game->get_gameobject()->has_music){
+		music.setVolume(game->get_gameobject()->volume);
 		music.play();
-
-	shoot_buf.loadFromFile("res/sfx/shootgun.wav");
-	shoot_snd.setBuffer(shoot_buf);
+	}
 
 	//- UI init
 	font.loadFromFile("res/fonts/PressStart2P.ttf");
@@ -52,7 +52,14 @@ void GameState::init(Game* game)
 
 
 	this->level_name = game->get_gameobject()->level_name;
+	game->get_gameobject()->wave = 0;
+	game->get_gameobject()->score = 0;
 
+	//- Sound setup
+	hit_snd.init("enemy_hurt.wav");
+	hurt_snd.init("player_hurt2.wav");
+	pickup_snd.init("pickup.wav");
+	shoot_snd.init("shootgun.wav");
 
 	//- Setup game view
 	game->get_window()->setView(level.get_view());
@@ -69,13 +76,15 @@ void GameState::player_shoot()
 			//- One straight forward bullet, -1 from ammo, 1 sfx
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
 			// player.get_weapon().add_ammo(-1);
-			ps(1);
+			// ps(1);
+			if(has_sfx)
+				shoot_snd.play();
 		}
 		break;
 		case Weapon::WeaponEnum::SHOTGUN:
 		{
 			//- 3 spread bullets, -3 from ammo, 3 sfxs
-			#define spread_angle 30
+			#define spread_angle 15
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation(), player.get_weapon().get_dmg()));
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()+spread_angle, player.get_weapon().get_dmg()));
 			bullets.push_back(new Bullet(player.get_x(), player.get_y(), player.get_rotation()-spread_angle, player.get_weapon().get_dmg()));
@@ -205,7 +214,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	}else{ //- Player OOB handle
 		player.set_x(player.get_lx());
 		player.set_y(player.get_ly());
-		std::cout << "OOB!\n";
+		// std::cout << "OOB!\n";
 	}
 	#undef t
 
@@ -350,6 +359,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 				player.set_invincibility(true);
 				player.get_inv_timer().restart();
 				player.hurt(mob->get_dmg());
+				hurt_snd.play();
 			}
 		}
 
@@ -358,7 +368,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 			if(mobs[i]->removed)
 			{
 				generate_pickup(mobs[i]->get_x(), mobs[i]->get_y());
-				std::cout << "Deleting mob: " << i << "\n";
+				// std::cout << "Deleting mob: " << i << "\n";
 				enemies_left--;
 				player.update_score(mobs[i]->get_points());
 				mobs[i] = nullptr;
@@ -389,6 +399,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
                 {
                     bullet->remove();
                     mob->hurt(bullet->get_dmg());
+                    hit_snd.play();
                 	break;
                 }
             }
@@ -406,6 +417,8 @@ void GameState::update(Game* game,  sf::Time deltaTime)
 	//- Change state on player death;
 	if (player.get_death())
 	{
+		game->get_gameobject()->wave = this->wave;
+		game->get_gameobject()->score = player.get_score();
 		music.stop();
 		game->get_window()->setView(game->get_window()->getDefaultView());
 		game->change_state(GameOverState::instance());
@@ -432,6 +445,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     	{
 			player.get_pickup(pc->get_id());
 			pc->remove();
+			pickup_snd.play();
     	}
 
     	if(pc->get_timer().getElapsedTime().asSeconds() >=  10.0f)
@@ -443,7 +457,7 @@ void GameState::update(Game* game,  sf::Time deltaTime)
     {
     	if(pickups[i]->removed)
     	{
-    		std::cout << "Deleting pickup: " << i << "\n";
+    		// std::cout << "Deleting pickup: " << i << "\n";
 			pickups[i] = nullptr;
 			pickups.erase(pickups.begin()+i);
     	}

@@ -15,6 +15,7 @@
 #include "../entities/basicenemy.h"
 #include "../entities/pickup.h"
 #include "../weapon.h"
+#include "../sound.hpp"
 #include "../screen/hud.h"
 #include "../levels/spawnpointlist.h"
 #include "../levels/spawnpoint.h"
@@ -47,7 +48,7 @@ private:
 
 	//- Audio stuff
 	sf::Music music;
-	sf::SoundBuffer shoot_buf; sf::Sound shoot_snd;
+	Sound hit_snd, hurt_snd, pickup_snd, shoot_snd;
 
 	//- UI stuff
 	Hud hud;

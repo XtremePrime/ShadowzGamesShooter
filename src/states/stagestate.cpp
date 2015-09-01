@@ -52,6 +52,13 @@ void StageState::init(Game* game)
 	init_text(level_names[DEMONS], font, "Demons Level", sf::Vector2f(levels[DEMONS].x+30,levels[DEMONS].y-15-10));
 
 	init_text(txt, font, "test", sf::Vector2f(300, 300));
+
+	music.openFromFile("res/music/stage_select.wav");
+	music.setLoop(true);
+	if(game->get_gameobject()->has_music){
+		music.setVolume(game->get_gameobject()->volume);
+		music.play();
+	}
 }
 
 void StageState::send_to_level(Game* game)
@@ -103,11 +110,13 @@ void StageState::handle_events(Game* game, sf::Event event)
 			case sf::Keyboard::Return:
 			{
 				send_to_level(game);
+				music.stop();
 				game->change_state(GameState::instance());
 			}
 			break;
 			case sf::Keyboard::Escape:
 			{
+				music.stop();
 				game->change_state(IntroState::instance());
 			}break;
 			default:
