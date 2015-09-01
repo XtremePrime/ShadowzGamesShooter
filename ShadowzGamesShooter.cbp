@@ -79,7 +79,8 @@
 		<Unit filename="src/pugixml.hpp" />
 		<Unit filename="src/screen/hud.cpp" />
 		<Unit filename="src/screen/hud.h" />
-		<Unit filename="src/soundmanager.h" />
+		<Unit filename="src/sound.cpp" />
+		<Unit filename="src/sound.h" />
 		<Unit filename="src/states/gameoverstate.cpp" />
 		<Unit filename="src/states/gameoverstate.h" />
 		<Unit filename="src/states/gamestate.cpp" />
